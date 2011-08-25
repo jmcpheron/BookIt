@@ -1,0 +1,57 @@
+div.header {
+-moz-border-radius: 25px 10px / 10px 25px;
+border-radius: 25px 10px / 10px 25px;
+background-color:#ccc;
+padding:5px;
+margin:5px;
+}
+
+  div.time {
+    margin-top:3em;
+  }
+  input {
+  margin:0;
+  padding:0;
+  }
+  div.time-picker {
+    margin-top: 1.1em;
+  }
+  .error {
+    border:1px solid red;
+  }
+div.time-picker {
+  position: absolute;
+  height: 191px;
+  width:4em; /* needed for IE */
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #000;
+  z-index: 99;
+}
+div.time-picker-12hours {
+  width:6em; /* needed for IE */
+}
+ 
+div.time-picker ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+div.time-picker li {
+  cursor: pointer;
+  height: 10px;
+  font: 12px/1 Helvetica, Arial, sans-serif;
+  padding: 4px 3px;
+}
+div.time-picker li.selected {
+  background: #316AC5;
+  color: #fff;
+}
+
+div#top_notifications {
+  padding: 4px 3px;
+}
+
+div.notify {
+  background: #ffff80;
+}
