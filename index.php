@@ -126,10 +126,7 @@ dayClick: function(date, allDay, jsEvent, view) {
 defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $s_minutes;?>,
   events: [
-    //$.fullCalendar.gcalFeed("https://www.google.com/calendar/feeds/jmcpheron%40sce.cc.ca.us/private-002cb3435c85a9ba62fc8346bc20dfaf/basic", {className: 'noms'}),
 <?
-$gcal_xml = "http://www.google.com/calendar/feeds/sce.cc.ca.us_dcoeprsmc0ldqjn403lr8rol34%40group.calendar.google.com/private-f55ed3611696fb7175d7319896b0ea1a/basic";
-$gcal_html = "http://www.google.com/calendar/embed?src=sce.cc.ca.us_dcoeprsmc0ldqjn403lr8rol34%40group.calendar.google.com&ctz=America/Los_Angeles";
 
 echo drawMyAppointmentsMonth($id, $day);
 ?>
@@ -138,9 +135,7 @@ echo drawMyAppointmentsMonth($id, $day);
 
 );
 $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['month'];?>, <?echo $date['day'];?>);
-var gcal = "<?echo $gcal_xml;?>";
 
-var source = $.fullCalendar.gcalFeed(gcal, {className: 'noms', editable: true, id: 'g'});
 
 $("button#add").click(function() {
   $('#calendar').fullCalendar('addEventSource',source );
