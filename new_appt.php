@@ -22,34 +22,19 @@ if($time == ""){
 }
 
 if($_POST){
-  //TODO move to function
   //TODO check for correct ous and roles, error out on bad
   $kkeys = array_keys($_POST);
   foreach($kkeys as $k){
     $$k = fixString($_POST[$k]);
   }
   
-  $bid = md5($title.mktime().rand(0,9));
   $start_time = $date." ".$start_time;
   $end_time = $date." ".$end_time;
  
-  $sql = "
-  INSERT INTO blocks
-  (bid, title, start_time, end_time, created_by, created)
-  VALUES
-  ('$bid', '$title', '$start_time', '$end_time', '$id', now())
-  ";
-  db_query($sql);
+  $bid = newBlock($start_time, $end_time, $title, $id);
 
-  $sql = "
-  INSERT INTO participants
-  (bid, id, ou_code, role, created, created_by, attending)
-  VALUES
-  ('$bid', '$id', '$ou_code', '$role', now(), '$id', '1')
-  
-  ";
-  //echo $sql;
-  db_query($sql);
+  addParticipant($bid, $id, $ou_code, $role, $id, '1');
+
   header("Location: $site_root?date=$date&view=agendaDay");
   exit;
 }

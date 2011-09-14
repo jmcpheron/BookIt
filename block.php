@@ -14,34 +14,58 @@ $bid = fixString($_GET['bid']);
 <body>
 <?
 drawHeader($id);
-$info = dbo_Appt($id, $bid);
-//print_r($info);
-//echo $bid;
+$info = getBlockGeneral($id, $bid);
 echo "<h3>".$info[0]['title']."</h3>";
 echo "<h4>".$info[0]['start_time']."</h4>";
-echo "Participants<hr />";
+
+
+
+$details = getBlockDetails($id, $bid);
+echo "<hr />Participants";
 
 echo "<table border=\"1\">";
 echo "<tr><td>Participant</td><td>Role</td><td>Attending</td><td>Attendaing from</td><td>Details</td></tr>\n";
-foreach($info as $item){
+foreach($details as $item){
 echo "<tr>";
 echo "<td>";
 echo $item['firstname']." ";
 echo $item['lastname'];
 echo "</td><td>";
+//echo $item['ou_code'];
 echo $item['role'];
 echo "</td><td>";
 echo $item['attending'];
 echo "</td><td>";
 echo $item['long_name'];
 echo "</td><td>";
-echo "<a href=\"\">...</a>";
+echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\">...</a>";
 echo "</td>";
 echo "</tr>\n";
 
 }
 echo "</table>";
 
+$properties = getBlockProperties($id, $bid);
+echo "<hr />Block Properties";
+if($properties){
+
+echo "<table border=\"1\">";
+echo "<tr><td>Role</td><td>key</td><td>Value</td></tr>\n";
+foreach($properties as $item){
+echo "<tr>";
+echo "<td>";
+echo $item['ou_code']." ";
+echo $item['role'];
+echo "</td><td>";
+echo $item['key'];
+echo "</td><td>";
+echo $item['value'];
+echo "</td>";
+echo "</tr>\n";
+
+}
+echo "</table>";
+}
 
 ?>
 

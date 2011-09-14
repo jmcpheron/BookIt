@@ -156,6 +156,37 @@ function drawMyAppointmentsMonth($id, $day, $ou_code = null, $role = null, $clas
   echo $return;
 }
 
+function getOpenAppointments($ou_code = null, $role = null){
+  $appointments = dbo_Search_Open_Appt($ou_code, $role);
+  return $appointments;
+}
+
+function drawBlockByBid($bid, $class = null){
+
+  if($className == null){
+    $className = 'default';
+  }
+  $appointments = dbo_getBid($bid, $class);
+  if($appointments){
+    $return = "";
+    foreach($appointments as $appt){
+      $return.= "{";
+      $return.= "title: '".$appt['title']."',\n";
+      $return.= "start: new Date(".$appt['start_time']."),\n";
+      $return.= "end: new Date(".$appt['end_time']."),\n";
+      $return.= "url: 'block.php?bid=".$appt['bid']."',\n";
+      $return.= "className: ['".$appt['ou_code']."-".$appt['role']."'],\n";
+      $return.= "color: '".$appt['color']."',\n";
+      $return.= "allDay: false";
+      $return.= "},\n\n";
+    }
+    $return = substr($return, 0, -1);
+  }else{
+    
+  }
+  echo $return;
+}
+
 function checkLogin($username, $password){
 
   //First let's check the LDAP server for login
@@ -260,5 +291,36 @@ function addRole($id, $ou, $role){
     dbo_addRole($id, $ou, $role);
   }
 
+}
+
+function getBlockGeneral($id, $bid){
+  $info = dbo_Appt_General($id, $bid);
+  return $info;
+}
+
+function getBlockDetails($id, $bid){
+
+  $info = dbo_Appt_Details($id, $bid);
+  return $info;
+ 
+}
+
+function getBlockProperties($id, $bid){
+  $info = dbo_Block_Properties($id, $bid);
+  return $info;
+}
+
+function newBlock($start_time, $end_time, $title, $created_by){
+  //Return bid (Block ID)
+  //Make up a bid
+  $bid = md5($title.mktime().rand(0,9));
+  
+  dbo_newBlock($bid, $start_time, $end_time, $title, $created_by);
+  return $bid;
+}
+
+function addParticipant($bid, $id, $ou_code, $role, $created_by, $attending = null){
+
+  dbo_addParticipant($bid, $id, $ou_code, $role, $created_by, $attending);
 }
 ?>

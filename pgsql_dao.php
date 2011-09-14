@@ -1,6 +1,34 @@
 <?
 
-function dbo_Appt($id, $bid){
+function dbo_Search_Open_Appt($ou, $role){
+  $sql = "
+select b.bid, b.title, p.role, p.key, cast(p.value as int),
+count(s.id)
+from blocks b
+left join properties p on (b.bid = p.bid)
+left join participants s on (b.bid = s.bid and s.role = '$role')
+where p.ou_code = '$ou'
+and p.role = '$role'
+and p.key = 'max'
+group by b.bid, b.title, p.role, p.key, p.value
+having count(s.id) < cast(p.value as int)
+";
+  $results = db_query($sql);
+  return $results;
+}
+
+
+function dbo_Appt_General($id, $bid){
+$sql = "
+select * from blocks b
+WHERE b.bid = '$bid'
+";
+$results = db_query($sql);
+return $results;
+
+}
+
+function dbo_Appt_Details($id, $bid){
 $sql = "
 select * from blocks b
 left join participants p on (b.bid= p.bid)
@@ -8,6 +36,16 @@ left join person n on (p.id = n.id)
 left join ous o on (p.ou_code = o.ou_code)
 WHERE b.bid = '$bid'
 order by role
+";
+$results = db_query($sql);
+return $results;
+
+}
+
+function dbo_Block_Properties($id, $bid){
+$sql = "
+select * from properties p
+WHERE p.bid = '$bid'
 ";
 $results = db_query($sql);
 return $results;
@@ -71,6 +109,35 @@ $results = db_query($sql);
 return $results;
 
 }
+
+
+function dbo_getBid($bid){
+
+//Notice the (MM - 1)
+//For some reason javascript starts counting months at zero. Crazy huh?
+$sql = "
+SELECT b.bid, p.ou_code, p.role,
+p.attending, p.created_by,
+b.title, 
+b.start_time, 
+TO_CHAR(b.start_time,'YYYY, (MM - 1), DD, HH24, MI') AS start_time,
+TO_CHAR(b.end_time,'YYYY, (MM - 1), DD, HH24, MI') AS end_time,
+case when u.sub_value is null then '#333399' else u.sub_value end as color
+FROM participants p 
+left join blocks b on (p.bid = b.bid)
+left join user_settings u on (
+  p.id = u.id 
+  and u.key = 'calendar_color'
+  and u.value = p.ou_code || '/' || p.role )
+where b.bid = '$bid'
+ORDER BY b.start_time
+";
+ 
+$results = db_query($sql);
+return $results;
+
+}
+
 function dbo_getMonthOfAppointments($id, $day, $ou_code = null, $role = null){
 
 //Notice the (MM - 1)
@@ -90,6 +157,7 @@ left join user_settings u on (
   and u.key = 'calendar_color'
   and u.value = p.ou_code || '/' || p.role )
 where p.id = '$id'
+--and TO_CHAR(b.start_time,'YYYY-MM') = '".substr($day, 0, 7)."'
 ORDER BY b.start_time
 ";
  
@@ -114,7 +182,6 @@ ORDER BY b.start_time
 //TODO Filter month
 $results = db_query($sql);
 return $results;
-
 }
 
 function dbo_person($id){
@@ -183,6 +250,7 @@ function dbo_getPassword($username){
 
 
 function dbo_insertOrUpdateLocalPassword($id, $password){ 
+  include("common.php");
   $sql = "
   SELECT count(*) as c
   FROM login
@@ -280,5 +348,70 @@ function dbo_CurrentUserValue($id, $key){
   ";
   $return = db_query($sql);
   return $return[0]['value'];
+}
+
+function dbo_getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $role = null){
+
+//Notice the (MM - 1)
+//For some reason javascript starts counting months at zero. Crazy huh?
+$sql = "
+SELECT b.bid, p.ou_code, p.role,
+p.attending, p.created_by,
+b.title,
+b.start_time,
+TO_CHAR(b.start_time,'YYYY, (MM - 1), DD, HH24, MI') AS start_time,
+TO_CHAR(b.end_time,'YYYY, (MM - 1), DD, HH24, MI') AS end_time,
+case when u.sub_value is null then '#333399' else u.sub_value end as color
+FROM participants p
+left join blocks b on (p.bid = b.bid)
+left join user_settings u on (
+  p.id = u.id
+  and u.key = 'calendar_color'
+  and u.value = p.ou_code || '/' || p.role )
+where p.id = '$id'
+";
+if($ou_code){
+  $sql.= "and p.ou_code = '$ou_code'";
+}
+if($role){
+  $sql.= "and p.role = '$role'";
+}
+$sql .= "
+and TO_CHAR(b.start_time,'YYYY-MM-DD') >= '".$start_day."'
+and TO_CHAR(b.start_time,'YYYY-MM-DD') <= '".$end_day."'
+ORDER BY b.start_time
+";
+//echo $sql;
+
+$results = db_query($sql);
+return $results;
+}
+
+function dbo_newBlock($bid, $start_time, $end_time, $title, $created_by){
+  $sql = "
+  INSERT INTO blocks
+  (bid, title, start_time, end_time, created_by, created)
+  VALUES
+  ('$bid', '$title', '$start_time', '$end_time', '$created_by', now())
+  ";
+  db_query($sql);
+  //Should we return somenthing?
+
+}
+
+function dbo_addParticipant($bid, $id, $ou_code, $role, $created_by, $attending){
+  //quote attending character if not null
+  if($attending){
+    $attending = "'$attending'";
+  }
+  $sql = "
+  INSERT INTO participants
+  (bid, id, ou_code, role, created, created_by, attending)
+  VALUES
+  ('$bid', '$id', '$ou_code', '$role', now(), '$created_by', $attending)
+  ";
+  db_query($sql);
+  //Should we return somenthing?
+
 }
 ?>

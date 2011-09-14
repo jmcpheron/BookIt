@@ -10,7 +10,7 @@ $view = fixString($_GET['view']);
 if($view == ""){
   $view = dbo_CurrentUserValue($id, 'default_view');
   if($view == ""){
-  $view = 'agendaWeek';
+  $view = 'month';
   }
 }
 
@@ -46,50 +46,27 @@ echo $full_calendar_links;
 ?>
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>
 <script type='text/javascript'>
-	$(document).ready(function() {
-
-$("#drop").draggable({
-  zIndex: 999,
-  revert: "invalid",
-  drop: function( event, ui ) {
-    $( this )
-      .addClass( "ui-state-highlight" )
-      .find( "p" )
-      .html( "Dropped!" );
-      alert('A');
-  }
-});
+$(document).ready(function() {
 	
-$.strPad = function(i,l,s) {
-	var o = i.toString();
-	if (!s) { s = '0'; }
-	while (o.length < l) {
-		o = s + o;
-	}
-	return o;
-};
-//alert(new Date(2008, 1, 20, 14, 30));
-		var date = new Date();
-		var d = date.getDate();
-		var m = date.getMonth();
-		var y = date.getFullYear();
-		
-//alert (new Date(y, m, d));
-//alert (new Date(2010,10,10));
-//alert(new date('12345634'));
-
-	$('#calendar').fullCalendar(
+  $.strPad = function(i,l,s) {
+    var o = i.toString();
+    if (!s) { s = '0'; }
+      while (o.length < l) {
+        o = s + o;
+      }
+    return o;
+  };
+var date = new Date();
+var d = date.getDate();
+var m = date.getMonth();
+var y = date.getFullYear();
+$('#calendar').fullCalendar(
 {
-/*
- viewDisplay: function(view) {
-        alert('The new title of the view is ' + view.title);
-    },
-*/
-			header: {
-				left: null,
-				center: 'title',
-				right: null
-			},
+  header: {
+  left: null,
+  center: 'title',
+  right: null
+},
 			editable: false,
 dayClick: function(date, allDay, jsEvent, view) {
   var curr_date = date.getDate();
@@ -127,8 +104,15 @@ defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $s_minutes;?>,
   events: [
 <?
+$ou_code = 'bookit';
+$role = 'student';
+$open_appts = getOpenAppointments($ou_code, $role);
+//print_r($open_appts);
+//TODO Limit date range
 
-echo drawMyAppointmentsMonth($id, $selected_date);
+foreach($open_appts as $item){
+  drawBlockByBid($item['bid'], $class);
+}
 ?>
 			]
 		}
@@ -182,12 +166,6 @@ drawCalControld($selected_date, $view);
 <? $q =  $_SERVER['QUERY_STRING'];
 ?>
 <div id="controls" class="main">
-<h2>Your Departments</h2>
-<ul>
-<li>Dept 1</li>
-<li><?echo mt_rand();?></li>
-<li><div id="drop">Drag and drop<br />me somewhere</div></li>
-</ul>
 </div>
 <div id='calendar' class="main"></div>
 </body>
