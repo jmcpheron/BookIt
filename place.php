@@ -44,6 +44,21 @@ function parseDateForJS($date){
 return $return;
 }
 $date = parseDateForJS($selected_date);
+//Set up some date limits so we don't get events for all time
+if($view == 'month'){
+  $start_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " -5 week") );
+  $end_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " +5 week") );
+}
+
+if($view == 'agendaWeek'){
+  $start_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " -1 week") );
+  $end_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " +1 week") );
+}
+
+if($view == 'agendaDay'){
+  $start_day = $selected_date;
+  $end_day = $selected_date;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -110,14 +125,17 @@ defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $s_minutes;?>,
   events: [
 <?
-$open_appts = getOpenAppointments($sou, $srole, $id, $ou, $role);
-//TODO Limit date range
+$open_appts = getOpenAppointments($sou, $srole, $start_day, $end_day, $id, $ou, $role);
 
+$events_string = "";
 if($open_appts){
   foreach($open_appts as $item){
-    drawBlockByBid($item['bid'], "test.php?bid=".$item['bid']);
+    $events_string .= drawBlockByBid($item['bid'], "test.php?bid=".$item['bid']);
   }
 }
+//Trim last comma
+$events_string = substr($events_string, 0, -5);
+echo $events_string;
 ?>
 			]
 		}

@@ -1,6 +1,6 @@
 <?
 
-function dbo_Search_Open_Appt($ou, $role, $by_id = null, $by_ou = null, $by_role = null){
+function dbo_Search_Open_Appt($ou, $role, $start_day, $end_day, $by_id = null, $by_ou = null, $by_role = null){
   $sql = "
 select b.bid, b.title, p.role, p.key, cast(p.value as int),
 count(s.id)
@@ -9,6 +9,8 @@ left join properties p on (b.bid = p.bid)
 left join participants s on (b.bid = s.bid and s.role = '$role')
 left join participants me on (b.bid = me.bid)
 where p.ou_code = '$ou'
+and TO_CHAR(b.start_time,'YYYY-MM-DD') >= '".$start_day."'
+and TO_CHAR(b.start_time,'YYYY-MM-DD') <= '".$end_day."'
 ";
 if($by_id){
   $sql .= "and me.id = '$by_id'";
@@ -123,7 +125,7 @@ return $results;
 }
 
 
-function dbo_getBid($bid, $id){
+function dbo_getBid($bid, $id = null){
 
 //Notice the (MM - 1)
 //For some reason javascript starts counting months at zero. Crazy huh?
@@ -142,9 +144,13 @@ left join user_settings u on (
   and u.key = 'calendar_color'
   and u.value = p.ou_code || '/' || p.role )
 where b.bid = '$bid'
+";
+if($id){
+  $sql.="and p.id = '$id'";
+}
+$sql.="
 ORDER BY b.start_time
 ";
- 
 $results = db_query($sql);
 return $results;
 
@@ -363,6 +369,7 @@ function dbo_CurrentUserValue($id, $key){
 }
 
 function dbo_getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $role = null){
+//TODO Maybe make the $ou_code and $role an array so we can display blocks from mutiple roles in one call
 
 //Notice the (MM - 1)
 //For some reason javascript starts counting months at zero. Crazy huh?
@@ -374,8 +381,10 @@ b.start_time,
 TO_CHAR(b.start_time,'YYYY, (MM - 1), DD, HH24, MI') AS start_time,
 TO_CHAR(b.end_time,'YYYY, (MM - 1), DD, HH24, MI') AS end_time,
 case when u.sub_value is null then '#333399' else u.sub_value end as color
-FROM participants p
-left join blocks b on (p.bid = b.bid)
+FROM blocks b
+--FROM participants p
+left join participants p on (b.bid = p.bid)
+--left join blocks b on (p.bid = b.bid)
 left join user_settings u on (
   p.id = u.id
   and u.key = 'calendar_color'
@@ -393,7 +402,6 @@ and TO_CHAR(b.start_time,'YYYY-MM-DD') >= '".$start_day."'
 and TO_CHAR(b.start_time,'YYYY-MM-DD') <= '".$end_day."'
 ORDER BY b.start_time
 ";
-//echo $sql;
 
 $results = db_query($sql);
 return $results;

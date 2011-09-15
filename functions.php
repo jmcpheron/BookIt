@@ -159,20 +159,23 @@ function drawMyAppointmentsMonth($id, $day, $ou_code = null, $role = null, $clas
   echo $return;
 }
 
-function getOpenAppointments($ou_code = null, $role = null, $by_id = null, $by_ou = null, $by_role = null){
-  $appointments = dbo_Search_Open_Appt($ou_code, $role, $by_id, $by_ou, $by_role);
+function getOpenAppointments($ou_code = null, $role = null, $start_day, $end_day, $by_id = null, $by_ou = null, $by_role = null){
+  $appointments = dbo_Search_Open_Appt($ou_code, $role, $start_day, $end_day, $by_id, $by_ou, $by_role);
   return $appointments;
 }
 
-function drawBlockByBid($bid, $page = null){
+function drawBlockByBid($bid, $page = null, $id = null){
 
-  if($className == null){
-    $className = 'default';
-  }
-  $appointments = dbo_getBid($bid, $class);
+  $appointments = dbo_getBid($bid,  $id);
   if($appointments){
     $return = "";
     foreach($appointments as $appt){
+      //Set initial color from ou/role settings 
+      $color = $appt['color'];
+
+      //Check if a rule overrides this color setting
+      
+
       $return.= "{";
       $return.= "title: '".$appt['title']."',\n";
       $return.= "start: new Date(".$appt['start_time']."),\n";
@@ -181,15 +184,15 @@ function drawBlockByBid($bid, $page = null){
         $return.= "url: '$page',\n";
       }
       $return.= "className: ['".$appt['ou_code']."-".$appt['role']."'],\n";
-      $return.= "color: '".$appt['color']."',\n";
+      $return.= "color: '".$color."',\n";
       $return.= "allDay: false";
-      $return.= "},\n\n";
+      $return.= "},\n\r\n\r";
     }
-    $return = substr($return, 0, -1);
   }else{
     
   }
-  echo $return;
+  //$return = substr($return, 0, -3);
+  return $return;
 }
 
 function checkLogin($username, $password){
@@ -331,5 +334,10 @@ function addParticipant($bid, $id, $ou_code, $role, $created_by, $attending = nu
 
 function addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by){
   dbo_addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by);
+}
+
+function getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $role = null){
+  $results = dbo_getRangeOfAppointments($id, $start_day, $end_day, $ou_code, $role);
+  return $results;
 }
 ?>

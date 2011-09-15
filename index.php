@@ -29,6 +29,22 @@ function parseDateForJS($date){
 return $return;
 }
 $date = parseDateForJS($selected_date);
+
+//Set up some date limits so we don't get events for all time
+if($view == 'month'){
+  $start_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " -5 week") );
+  $end_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " +5 week") );
+}
+
+if($view == 'agendaWeek'){
+  $start_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " -1 week") );
+  $end_day = date('Y-m-d', strtotime(date("Y-m-d", strtotime($selected_date)) . " +1 week") );
+}
+
+if($view == 'agendaDay'){
+  $start_day = $selected_date;
+  $end_day = $selected_date;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -48,6 +64,10 @@ echo $full_calendar_links;
 <script type='text/javascript'>
 	$(document).ready(function() {
 $(".bookit-charter").css('color','green');
+
+$("#drop").mouseover(function() {
+  $(this).css('cursor', 'pointer');
+});
 
 $("#drop").draggable({
   zIndex: 999,
@@ -129,7 +149,17 @@ slotMinutes: <?echo $s_minutes;?>,
   events: [
 <?
 
-echo drawMyAppointmentsMonth($id, $selected_date);
+$events_string = "";
+$appointments = getRangeOfAppointments($id, $start_day, $end_day);
+if($appointments){
+  foreach($appointments as $item){
+    $events_string .= drawBlockByBid($item['bid'], "block.php?bid=".$item['bid'], $id);
+  }
+}
+//Trim last comma
+$events_string = substr($events_string, 0, -5);
+echo $events_string;
+echo "\n\r";
 ?>
 			]
 		}
@@ -137,14 +167,6 @@ echo drawMyAppointmentsMonth($id, $selected_date);
 );
 $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['month'];?>, <?echo $date['day'];?>);
 
-
-$("button#add").click(function() {
-  $('#calendar').fullCalendar('addEventSource',source );
-});
-
-$("button#rem").click(function() {
-  $('#calendar').fullCalendar('removeEvents', noms  );
-});
 		
 	});
 
