@@ -11,8 +11,6 @@ function fixString($str){
 function db_query($sql){
 include("config.php");
 
-//connect to a database named "mary" on the host "sheep" with a username and password
-
 $connection = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_pass");
 
 // let me know if the connection fails
@@ -52,7 +50,10 @@ function drawRolesSelection($id, $ou, $role = null){
 
 }
 
-function drawCalControld($date, $current_view){
+function drawCalControld($date, $current_view, $extra_array = null){
+  if($extra_array){
+    $query_string = http_build_query($extra_array);
+  }
   $return = "";
   if($date == ""){
     $date = date('Y-m-d');
@@ -70,8 +71,8 @@ function drawCalControld($date, $current_view){
     $prev = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " - 1 day"));
     $next = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " + 1 day"));
   }
-  $return.="<a href=\"?date=$prev&view=$current_view\"><<</a> | ";
-  $return.="<a href=\"?date=$next&view=$current_view\">>></a> | ";
+  $return.="<a href=\"?date=$prev&view=$current_view&$query_string\"><<</a> | ";
+  $return.="<a href=\"?date=$next&view=$current_view&$query_string\">>></a> | ";
 
 
   include("common.php");
@@ -79,7 +80,7 @@ function drawCalControld($date, $current_view){
     if($current_view == $view){
       $return.= "$view | ";
     }else{
-      $return.= "<a href=\"?date=$date&view=$view\">$view</a> | ";
+      $return.= "<a href=\"?date=$date&view=$view&$query_string\">$view</a> | ";
     }
   }
 echo  $return;
@@ -146,6 +147,8 @@ function drawMyAppointmentsMonth($id, $day, $ou_code = null, $role = null, $clas
       $return.= "url: 'block.php?bid=".$appt['bid']."',\n";
       $return.= "className: ['".$appt['ou_code']."-".$appt['role']."'],\n";
       $return.= "color: '".$appt['color']."',\n";
+      //$return.= "backgroundColor: 'darkred',\n";
+      //$return.= "textColor: 'darkred',\n";
       $return.= "allDay: false";
       $return.= "},\n\n";
     }
@@ -156,12 +159,12 @@ function drawMyAppointmentsMonth($id, $day, $ou_code = null, $role = null, $clas
   echo $return;
 }
 
-function getOpenAppointments($ou_code = null, $role = null){
-  $appointments = dbo_Search_Open_Appt($ou_code, $role);
+function getOpenAppointments($ou_code = null, $role = null, $by_id = null, $by_ou = null, $by_role = null){
+  $appointments = dbo_Search_Open_Appt($ou_code, $role, $by_id, $by_ou, $by_role);
   return $appointments;
 }
 
-function drawBlockByBid($bid, $class = null){
+function drawBlockByBid($bid, $page = null){
 
   if($className == null){
     $className = 'default';
@@ -174,7 +177,9 @@ function drawBlockByBid($bid, $class = null){
       $return.= "title: '".$appt['title']."',\n";
       $return.= "start: new Date(".$appt['start_time']."),\n";
       $return.= "end: new Date(".$appt['end_time']."),\n";
-      $return.= "url: 'block.php?bid=".$appt['bid']."',\n";
+      if($page){
+        $return.= "url: '$page',\n";
+      }
       $return.= "className: ['".$appt['ou_code']."-".$appt['role']."'],\n";
       $return.= "color: '".$appt['color']."',\n";
       $return.= "allDay: false";
@@ -313,7 +318,7 @@ function getBlockProperties($id, $bid){
 function newBlock($start_time, $end_time, $title, $created_by){
   //Return bid (Block ID)
   //Make up a bid
-  $bid = md5($title.mktime().rand(0,9));
+  $bid = md5($title.mktime().rand(0,9).$start_time);
   
   dbo_newBlock($bid, $start_time, $end_time, $title, $created_by);
   return $bid;
@@ -322,5 +327,9 @@ function newBlock($start_time, $end_time, $title, $created_by){
 function addParticipant($bid, $id, $ou_code, $role, $created_by, $attending = null){
 
   dbo_addParticipant($bid, $id, $ou_code, $role, $created_by, $attending);
+}
+
+function addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by){
+  dbo_addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by);
 }
 ?>

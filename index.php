@@ -47,6 +47,7 @@ echo $full_calendar_links;
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>
 <script type='text/javascript'>
 	$(document).ready(function() {
+$(".bookit-charter").css('color','green');
 
 $("#drop").draggable({
   zIndex: 999,
@@ -182,6 +183,8 @@ drawCalControld($selected_date, $view);
 <? $q =  $_SERVER['QUERY_STRING'];
 ?>
 <div id="controls" class="main">
+<!--TODO remove demo-->
+<a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a><br />
 <h2>Your Departments</h2>
 <ul>
 <li>Dept 1</li>

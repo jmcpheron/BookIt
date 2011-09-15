@@ -1,13 +1,25 @@
 <?
 
-function dbo_Search_Open_Appt($ou, $role){
+function dbo_Search_Open_Appt($ou, $role, $by_id = null, $by_ou = null, $by_role = null){
   $sql = "
 select b.bid, b.title, p.role, p.key, cast(p.value as int),
 count(s.id)
 from blocks b
 left join properties p on (b.bid = p.bid)
 left join participants s on (b.bid = s.bid and s.role = '$role')
+left join participants me on (b.bid = me.bid)
 where p.ou_code = '$ou'
+";
+if($by_id){
+  $sql .= "and me.id = '$by_id'";
+}
+if($by_ou){
+  $sql .= "and me.ou_code = '$by_ou'";
+}
+if($by_role){
+  $sql .= "and me.role = '$by_role'";
+}
+$sql .= "
 and p.role = '$role'
 and p.key = 'max'
 group by b.bid, b.title, p.role, p.key, p.value
@@ -111,7 +123,7 @@ return $results;
 }
 
 
-function dbo_getBid($bid){
+function dbo_getBid($bid, $id){
 
 //Notice the (MM - 1)
 //For some reason javascript starts counting months at zero. Crazy huh?
@@ -413,5 +425,16 @@ function dbo_addParticipant($bid, $id, $ou_code, $role, $created_by, $attending)
   db_query($sql);
   //Should we return somenthing?
 
+}
+
+function dbo_addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by){
+  //TODO Check for duplicates, or overlapping properties
+  $sql = "
+  INSERT INTO properties
+  (bid, id, ou_code, role, key, value, created_by)
+  VALUES
+  ('$bid', '$id', '$ou_code', '$role', '$key', '$value', '$created_by')
+  ";
+  db_query($sql);
 }
 ?>

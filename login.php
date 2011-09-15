@@ -46,6 +46,9 @@ if(tryLdapAuth($username, $password) == true){
 
   //TODO Remove for production
   addRole($username, 'bookit', 'charter');
+  include("demo_functions.php");
+  addSomeAppts($username);
+  //END remove
   
   getLdapPersonInfo($username);
   session_start();
@@ -77,5 +80,8 @@ if(checkLogin($username, $password) == true){
 if($success == false){
 
   echo "Error. Could be a bad username or password";
+  exit;
 }
+
+
 ?>

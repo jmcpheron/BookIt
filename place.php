@@ -20,6 +20,21 @@ if($_GET['s']){
   $s_minutes = 30;
 }
 
+$sid = fixString($_GET['sid']);
+$sou = fixString($_GET['sou']);
+$srole = fixString($_GET['srole']);
+$ou = fixString($_GET['ou']);
+$role = fixString($_GET['role']);
+
+$extra_array = array(
+  'sid'=>$sid,
+  'sou'=>$sou,
+  'srole'=>$srole,
+  'ou'=>$ou,
+  'role'=>$role,
+);
+    $query_string = http_build_query($extra_array);
+
 function parseDateForJS($date){
   $return = array(
     'year' => substr($date, 0, 4),
@@ -84,34 +99,24 @@ dayClick: function(date, allDay, jsEvent, view) {
   var string_time = curr_hour + ":" + $.strPad(curr_min, 2);
 
         if (allDay) {
-            //alert('Clicked on the entire day: ' + date);
-            //window.location.href = "new_appt.php?date=" + string_date + "&time=09:00";
-            window.location.href = "?date=" + string_date + "&view=agendaDay";
+            window.location.href = "?date=" + string_date + "&view=agendaDay&<?echo $query_string;?>";
         }else{
-            window.location.href = "new_appt.php?date=" + string_date + "&time=" + string_time;
-            //alert('Clicked on the slot: ' + date.format("isoDateTime"));
+            //window.location.href = "new_appt.php?date=" + string_date + "&time=" + string_time;
         }
 
-        //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-        //alert('Current view: ' + view.name);
-
-        // change the day's background color just for fun
-        //$(this).css('background-color', 'red');
 
     },
 defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $s_minutes;?>,
   events: [
 <?
-$ou_code = 'bookit';
-$role = 'student';
-$open_appts = getOpenAppointments($ou_code, $role);
-//print_r($open_appts);
+$open_appts = getOpenAppointments($sou, $srole, $id, $ou, $role);
 //TODO Limit date range
 
-foreach($open_appts as $item){
-  drawBlockByBid($item['bid'], $class);
+if($open_appts){
+  foreach($open_appts as $item){
+    drawBlockByBid($item['bid'], "test.php?bid=".$item['bid']);
+  }
 }
 ?>
 			]
@@ -157,14 +162,11 @@ $("button#rem").click(function() {
 <body>
 <?
 
-//print_r(getLdapPersonInfo($id));
 drawHeader($id);
-drawCalControld($selected_date, $view);
+drawCalControld($selected_date, $view, $extra_array);
 ?>
 <hr />
 
-<? $q =  $_SERVER['QUERY_STRING'];
-?>
 <div id="controls" class="main">
 </div>
 <div id='calendar' class="main"></div>
