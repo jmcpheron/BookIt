@@ -40,4 +40,9 @@ agendaDay - see example (available since version 1.4)
 You can define header buttons to allow the user to switch between them. You can set the initial view of the calendar with the defaultView option.
 */
 $view_array = array('month', 'agendaWeek', 'agendaDay');
+
+$common_css = "
+<link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
+<link rel='stylesheet' href='http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css'>
+";
 ?>

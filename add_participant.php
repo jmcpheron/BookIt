@@ -2,6 +2,36 @@
 include("common.php");
 include_once("session.php");
 $bid = fixString($_GET['bid']);
+
+$sid = fixString($_GET['sid']);
+$sou = fixString($_GET['sou']);
+$srole = fixString($_GET['srole']);
+$ou = fixString($_GET['ou']);
+$role = fixString($_GET['role']);
+$s = fixString($_GET['s']);
+
+$info = getBlockGeneral($id, $bid);
+
+$bid_date = substr($info[0]['start_time'], 0, 10);
+$back_to_search = "place.php?date=$bid_date&$query_string";
+
+$extra_array = array(
+  'sid'=>$sid,
+  'sou'=>$sou,
+  'srole'=>$srole,
+  'ou'=>$ou,
+  'role'=>$role,
+  's'=>$s,
+);
+    $query_string = http_build_query($extra_array);
+
+
+if($_POST){
+ 
+  addParticipant($bid, $sid, $sou, $srole, $id, '1');
+  header("Location: index.php?date=$bid_date");
+  exit;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -16,7 +46,25 @@ echo $common_css;
 <div class="container">
 <?
 drawHeader($id);
-$info = getBlockGeneral($id, $bid);
+
+$place_name = getName($sid);
+echo "
+<div class=\"alert-message warning\">
+  <a class=\"close\" href=\"$back_to_search\">x</a>
+  <p><strong>Add $place_name (@$sid) to this Block?</strong><br />
+  Well?
+  </p>
+
+  <div class=\"alert-actions\">
+  <form action=\"\" method=\"post\">
+  <input type=\"hidden\" name=\"bid\" value=\"$bid\">
+  <input type=\"submit\" class=\"btn small primary\" value=\"Add Student\"> 
+  <a class=\"btn small\" href=\"$back_to_search&date=$bid_date\">Cancel</a>
+  </form>
+  </div>
+</div>
+";
+
 echo "<h3>".$info[0]['title']."</h3>";
 echo "<h4>".$info[0]['start_time']."</h4>";
 
@@ -25,7 +73,7 @@ echo "<h4>".$info[0]['start_time']."</h4>";
 $details = getBlockDetails($id, $bid);
 echo "<hr />Participants";
 
-echo "<table border=\"1\" class=\"zebra-striped\">";
+echo "<table border=\"1\" class=\"zebra-stripes\">";
 echo "<thead><tr><th>Participant</th><th>Role</th><th>Attending</th><th>Attendaing from</th><th>Details</th></tr></thead>\n";
 echo "<tbody>";
 foreach($details as $item){
@@ -50,10 +98,10 @@ echo "</tbody>";
 echo "</table>";
 
 $properties = getBlockProperties($id, $bid);
-echo "<hr />Block Properties";
+echo "<hr />Block Properties<br />";
 if($properties){
 
-echo "<table border=\"1\">";
+echo "<table border=\"1\" class=\"zebra-stripes\">";
 echo "<thead><tr><th>Role</th><th>key</th><th>Value</th></tr></thead>\n";
 echo "<tbody>";
 foreach($properties as $item){

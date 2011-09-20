@@ -25,6 +25,7 @@ $sou = fixString($_GET['sou']);
 $srole = fixString($_GET['srole']);
 $ou = fixString($_GET['ou']);
 $role = fixString($_GET['role']);
+$s = fixString($_GET['s']);
 
 $extra_array = array(
   'sid'=>$sid,
@@ -32,6 +33,7 @@ $extra_array = array(
   'srole'=>$srole,
   'ou'=>$ou,
   'role'=>$role,
+  's'=>$s,
 );
     $query_string = http_build_query($extra_array);
 
@@ -67,6 +69,7 @@ if($view == 'agendaDay'){
 <title><?echo $site_title;?> </title>
 <link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
 <?
+echo $common_css;
 echo $full_calendar_css;
 ?>
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
@@ -130,7 +133,7 @@ $open_appts = getOpenAppointments($sou, $srole, $start_day, $end_day, $id, $ou, 
 $events_string = "";
 if($open_appts){
   foreach($open_appts as $item){
-    $events_string .= drawBlockByBid($item['bid'], "test.php?bid=".$item['bid']);
+    $events_string .= drawBlockByBid($item['bid'], "add_participant.php?bid=".$item['bid']."&".$query_string);
   }
 }
 //Trim last comma
@@ -166,6 +169,7 @@ $("button#rem").click(function() {
 
 .main {float:left;}
 #controls {
+  width: 20%;
   height: 100px;
   margin: 0 auto;
   }
@@ -178,14 +182,32 @@ $("button#rem").click(function() {
 </style>
 </head>
 <body>
+<div class="container">
 <?
 
 drawHeader($id);
 drawCalControld($selected_date, $view, $extra_array);
 ?>
+<br />
+<br />
+<br />
+<div class="alert-message info">
+
+<?
+echo "<a href=\"index.php?date=$selected_date\" class=\"close\">x</a>";
+echo "Pick appointment time for ";
+$place_name = getName($sid);
+echo "<b>$place_name (@$sid) </b>";
+
+echo "</div>";
+?>
 <hr />
 
-<div id="controls" class="main">
+<div id="controls" class="main sidebar">
 </div>
-<div id='calendar' class="main"></div>
+<div class="content">
+  <div id='calendar' class="main"></div>
+  </div>
+</div>
 </body>
+</html>

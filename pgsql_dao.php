@@ -445,4 +445,20 @@ function dbo_addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by){
   ";
   db_query($sql);
 }
+
+function dbo_isBidFull($bid){
+  $sql = "
+select count(s.id) as count
+from properties p
+left join participants s on (
+  p.bid = s.bid 
+  and p.ou_code = s.ou_code
+  and p.role = s.role
+)
+where p.bid = '$bid'
+and s.id is not null
+  ";
+  $results = db_query($sql);
+  return $results[0]['count'];
+}
 ?>

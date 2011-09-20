@@ -71,34 +71,91 @@ function drawCalControld($date, $current_view, $extra_array = null){
     $prev = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " - 1 day"));
     $next = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " + 1 day"));
   }
-  $return.="<a href=\"?date=$prev&view=$current_view&$query_string\"><<</a> | ";
-  $return.="<a href=\"?date=$next&view=$current_view&$query_string\">>></a> | ";
+  $return.="<a class=\"btn info\" href=\"?date=$prev&view=$current_view&$query_string\"><<</a> ";
+  $return.="<a class=\"btn info\" href=\"?date=$next&view=$current_view&$query_string\">>></a> &nbsp; ";
 
 
   include("common.php");
   foreach($view_array as $view){
     if($current_view == $view){
-      $return.= "$view | ";
+      $return.= "<a class=\"btn disabled\">$view</a> ";
     }else{
-      $return.= "<a href=\"?date=$date&view=$view&$query_string\">$view</a> | ";
+      $return.= "<a class=\"btn primary\" href=\"?date=$date&view=$view&$query_string\">$view</a> ";
     }
   }
 echo  $return;
 }
 
+function getName($id){
+  $person = dbo_person($id);
+  $return = "[Name not found]";
+  if($person){
+    $return = $person['firstname'];
+    $return .= " ";
+    $return .= $person['middlename'];
+    $return .= " ";
+    $return .= $person['lastname'];
+  }
+  //$return = $person;
+  return $return;
+}
 
 function drawHeader($id){
   $page = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   include("common.php");
   include("session.php");
   $person = dbo_person($id);
+
+echo '
+  <div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar" data-dropdown="dropdown" >
+      <div class="topbar-inner">
+        <div class="container">
+          <h3><a href="'.$site_root.'">'.$site_title.'</a></h3>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">Dropdown</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Secondary link</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Another link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="pull-left" action="">
+            <input type="text" placeholder="Search" />
+          </form>
+          <ul class="nav secondary-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">Dropdown</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Secondary link</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Another link</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div><!-- /topbar-inner -->
+    </div><!-- /topbar -->
+  </div><!-- /topbar-wrapper -->
+';
+
+/*
   echo "<div class=\"header\">";
   echo "<a href=\"$site_root\">$site_title</a>";
-  echo "</div>";
-  echo "<div id=\"top_notifications\">&nbsp;</div>";
+  echo "</div>\n";
+*/
+  echo "<div id=\"top_notifications\">&nbsp;</div>\n";
 
   if($logged_in == true){
-    echo "<div id=\"login\"><a href=\"profile.php\">".$person['firstname']." ".$person['lastname']."</a> | <a href=\"logout.php\">Logout</a></div>";
+    echo "<div id=\"login\"><a href=\"profile.php\">".$person['firstname']." ".$person['lastname']."</a> | <a href=\"logout.php\">Logout</a></div>\n";
   }else{
   echo "<div id=\"login\">";
   //print_r($_SERVER);
@@ -174,6 +231,10 @@ function drawBlockByBid($bid, $page = null, $id = null){
       $color = $appt['color'];
 
       //Check if a rule overrides this color setting
+      $full = dbo_isBidFull($bid);
+      if($full > 0){
+        $color = 'darkred';
+      }
       
 
       $return.= "{";

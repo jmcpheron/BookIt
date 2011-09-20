@@ -51,10 +51,12 @@ if($view == 'agendaDay'){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
 <?
+echo $common_css;
 echo $full_calendar_css;
+
 ?>
+<script type='text/javascript' src='http://twitter.github.com/bootstrap/1.3.0/bootstrap-dropdown.js'></script>
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type='text/javascript' src='<?echo $jquery_ui_path;?>'></script>
 <?
@@ -146,6 +148,7 @@ dayClick: function(date, allDay, jsEvent, view) {
     },
 defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $s_minutes;?>,
+firstHour: 8,
   events: [
 <?
 
@@ -174,15 +177,16 @@ $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['m
 <style type='text/css'>
 
 	body {
-		margin-top: 40px;
-		text-align: center;
-		font-size: 14px;
-		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+margin-top: 40px;
+text-align: center;
+font-size: 14px;
+font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 		}
 
 .main {float:left;}
 #controls {
   height: 100px;
+  width: 18%;
   margin: 0 auto;
   }
 #calendar {
@@ -194,6 +198,7 @@ $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['m
 </style>
 </head>
 <body>
+<div class="container">
 <?
 
 //print_r(getLdapPersonInfo($id));
@@ -204,15 +209,17 @@ drawCalControld($selected_date, $view);
 
 <? $q =  $_SERVER['QUERY_STRING'];
 ?>
-<div id="controls" class="main">
+<div id="controls" class="main sidebar">
 <!--TODO remove demo-->
-<a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a><br />
-<h2>Your Departments</h2>
+<div class="alert-message"><a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br /></div>
+<h2>Departments</h2>
 <ul>
 <li>Dept 1</li>
 <li><?echo mt_rand();?></li>
-<li><div id="drop">Drag and drop<br />me somewhere</div></li>
+<li><div id="drop" class="alert-message">Drag and <br />drop </div></li>
 </ul>
 </div>
 <div id='calendar' class="main"></div>
+
+</div>
 </body>

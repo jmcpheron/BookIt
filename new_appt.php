@@ -45,7 +45,9 @@ if($_POST){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
+<?
+echo $common_css;
+?>
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type="text/javascript" src="<?echo $jquery_timePicker_path;?>"></script> 
 <script type="text/javascript"> 
@@ -105,23 +107,29 @@ $(document).ready(function() {
 </script> 
 </head>
 <body>
+<div class="containr">
 <?
 drawHeader($id);
+
 
 echo "<h3>$ou</h3>";
 ?>
 
-<form name="new_appt" method="post" action="">
+<form name="new_appt" method="post" action="" class="form-stacked">
 Title: <input type=text name="title" id="title" /><br />
 Role: <select name="role">
 <?
 drawRolesSelection($id, $ou, $role);
 ?>
 </select>
-<div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" /> 
+<div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" class="span2" /> 
 End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" /></div>
 <input type=hidden name="date" value="<?echo $date;?>"><br />
 <input type=hidden name="ou_code" value="<?echo $ou;?>"><br />
-<input type=submit value="Save" />
+<input type=submit value="Save" class="btn primary"/> &nbsp;
+<a href="index.php?date=<?echo $date;?>" class="btn"/>Cancel</a>
 </form>
 
+</div>
+</body>
+</html>

@@ -19,7 +19,6 @@ if($_POST){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -34,43 +33,52 @@ $(document).ready(function() {
       if(data.status == 'success'){
         $("div#top_notifications").html("Prefrences saved. \"" + data.key + "\" set to \"" + data.value + "\"" );
         $("div#top_notifications").addClass("notify");
+        $("div#top_notifications").addClass("alert-message");
       }
      }, "json");
   });
 });
 </script>
+<?
+echo $common_css;
+?>
 </head>
 <body>
+<div class="container">
+<div class="content main">
 <?
 drawHeader($id);
 //TODO Turn this into a more generic function
 //Get current value
-echo "<h2>Default Role</h2>";
+echo "\n";
+
+echo "<div class=\"blah\">";
+
+echo "<form class=\"form-stacked\">";
+echo "<h2>Default Role</h2>\n";
 $current_default_role = dbo_CurrentUserValue($id, 'default_role');
 
 $results = getOus($id);
 if($results){
 foreach($results as $item){
-  echo "<b>".$item['long_name']."</b>";
+  echo "<h3>".$item['long_name']."</h3>";
   echo "<br />";
   $roles = getRoles($id, $item['ou_code']);
   
   foreach($roles as $role){
     $full_role = $item['ou_code']."/".$role['role'];
-    //echo "<span class=\"roles\" id=\"".$item['ou_code']."/".$role['role']."\">+</span>";
+    echo "<label for=\"$full_role\">";
     echo "<input type=\"radio\" name=\"default_role\" value=\"$full_role\" class=\"roles\" id=\"$full_role\" ";
       if($full_role == $current_default_role){
         echo "CHECKED";
       }
-    echo ">";
-    echo "<label for=\"$full_role\">";
+    echo ">\n";
     echo $role['long_name'];
-    echo "</label>";
+    echo "</label>\n";
     echo "<br />\n";
   }
 }
 }
-
 //Default View
 echo "<h2>Default View</h2>";
 $current_default_view = dbo_CurrentUserValue($id, 'default_view');
@@ -78,14 +86,23 @@ $current_default_view = dbo_CurrentUserValue($id, 'default_view');
   foreach($view_array as $view){
     $full_role = $item['ou_code']."/".$role['role'];
     //echo "<span class=\"roles\" id=\"".$item['ou_code']."/".$role['role']."\">+</span>";
-    echo "<input type=\"radio\" name=\"default_view\" value=\"$view\" class=\"view\" id=\"$view\" ";
+    echo "<label>";
+    echo "<input type=\"radio\" name=\"default_view\" value=\"$view\" id=\"$view\" ";
       if($view == $current_default_view){
         echo "CHECKED";
       }
-    echo ">";
-    echo "<label for=\"$view\">";
-    echo $view;
-    echo "</label>";
-    echo "<br />\n";
+    echo ">\n";
+    echo "<span>$view</span>";
+    echo "</label>\n";
+    //echo "<br />\n";
   }
 ?>
+  </div>
+</div>
+<a href="index.php" class="btn primary">Done</a>
+</form>
+
+</div>
+</div>
+</body>
+</html>
