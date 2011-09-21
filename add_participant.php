@@ -13,7 +13,6 @@ $s = fixString($_GET['s']);
 $info = getBlockGeneral($id, $bid);
 
 $bid_date = substr($info[0]['start_time'], 0, 10);
-$back_to_search = "place.php?date=$bid_date&$query_string";
 
 $extra_array = array(
   'sid'=>$sid,
@@ -23,7 +22,8 @@ $extra_array = array(
   'role'=>$role,
   's'=>$s,
 );
-    $query_string = http_build_query($extra_array);
+$query_string = http_build_query($extra_array);
+$back_to_search = "place.php?date=$bid_date&$query_string";
 
 
 if($_POST){
@@ -59,7 +59,7 @@ echo "
   <form action=\"\" method=\"post\">
   <input type=\"hidden\" name=\"bid\" value=\"$bid\">
   <input type=\"submit\" class=\"btn small primary\" value=\"Add Student\"> 
-  <a class=\"btn small\" href=\"$back_to_search&date=$bid_date\">Cancel</a>
+  <a class=\"btn small\" href=\"$back_to_search\">Cancel</a>
   </form>
   </div>
 </div>
