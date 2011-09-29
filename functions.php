@@ -71,8 +71,8 @@ function drawCalControld($date, $current_view, $extra_array = null){
     $prev = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " - 1 day"));
     $next = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " + 1 day"));
   }
-  $return.="<a class=\"btn info\" href=\"?date=$prev&view=$current_view&$query_string\"><<</a> ";
-  $return.="<a class=\"btn info\" href=\"?date=$next&view=$current_view&$query_string\">>></a> &nbsp; ";
+  $return.="<a class=\"btn info\" href=\"?date=$prev&view=$current_view&$query_string\">&larr;</a> ";
+  $return.="<a class=\"btn info\" href=\"?date=$next&view=$current_view&$query_string\">&raquo;</a> &nbsp; ";
 
 
   include("common.php");
@@ -146,7 +146,7 @@ echo '
   echo "<a href=\"$site_root\">$site_title</a>";
   echo "</div>\n";
 */
-  echo "<div id=\"top_notifications\">&nbsp;</div>\n";
+  echo "<div id=\"top_notifications\">&nbsp;<br /><br /><br /></div>\n";
 
   if($logged_in == true){
     //echo "<div id=\"login\"><a href=\"profile.php\">".$person['firstname']." ".$person['lastname']."</a> | <a href=\"logout.php\">Logout</a></div>\n";
@@ -393,6 +393,11 @@ function addProperty($bid, $id, $ou_code, $role, $key, $value, $created_by){
 
 function getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $role = null){
   $results = dbo_getRangeOfAppointments($id, $start_day, $end_day, $ou_code, $role);
+  return $results;
+}
+
+function getUserSettingValue($id, $setting_name){
+  $results = dbo_CurrentUserValue($id, $setting_name);
   return $results;
 }
 ?>

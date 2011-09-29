@@ -8,17 +8,18 @@ if($selected_date == ""){
 
 $view = fixString($_GET['view']);
 if($view == ""){
-  $view = dbo_CurrentUserValue($id, 'default_view');
+  $view = getUserSettingValue($id, 'default_view');
   if($view == ""){
-  $view = 'month';
+  $view = 'agendaWeek';
   }
 }
 
-if($_GET['s']){
-  $s_minutes = $_GET['s'];
-}else{
-  $s_minutes = 30;
+$slot_size = getUserSettingValue($id, 'slot_size');
+if($slot_size == ""){
+  //Default Slot Size
+  $slot_size = 15;
 }
+
 
 $sid = fixString($_GET['sid']);
 $sou = fixString($_GET['sou']);
@@ -125,7 +126,7 @@ dayClick: function(date, allDay, jsEvent, view) {
 
     },
 defaultView: '<?echo $view;?>',
-slotMinutes: <?echo $s_minutes;?>,
+slotMinutes: <?echo $slot_size;?>,
   events: [
 <?
 $open_appts = getOpenAppointments($sou, $srole, $start_day, $end_day, $id, $ou, $role);

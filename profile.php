@@ -96,6 +96,25 @@ $current_default_view = dbo_CurrentUserValue($id, 'default_view');
     echo "</label>\n";
     //echo "<br />\n";
   }
+
+
+//Default Time Slot Size
+echo "<h2>Default Time Slot Size</h2>";
+$current_default_view = dbo_CurrentUserValue($id, 'slot_size');
+  
+  foreach($slot_array as $slot){
+    $full_role = $item['ou_code']."/".$role['role'];
+    //echo "<span class=\"roles\" id=\"".$item['ou_code']."/".$role['role']."\">+</span>";
+    echo "<label>";
+    echo "<input type=\"radio\" name=\"slot_size\" value=\"$slot\" id=\"$slot\" ";
+      if($slot == $current_default_view){
+        echo "CHECKED";
+      }
+    echo ">\n";
+    echo "<span>$slot</span>";
+    echo "</label>\n";
+    //echo "<br />\n";
+  }
 ?>
   </div>
 </div>
