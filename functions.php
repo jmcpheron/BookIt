@@ -134,7 +134,7 @@ echo '
 -->
         <p class="pull-right">Logged in as 
         <a href="profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
-        <a href=\"logout.php\">Logout</a></p>
+        <a href="logout.php">Logout</a></p>
         </div>
       </div><!-- /topbar-inner -->
     </div><!-- /topbar -->
