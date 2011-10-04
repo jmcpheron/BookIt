@@ -22,6 +22,8 @@ if($_POST){
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type='text/javascript'>
 $(document).ready(function() {
+
+  //For radio buttons
   $("input:radio").click(function() {
     var full_role = $(this).attr('id');
     var css_key = $(this).attr('name');
@@ -37,6 +39,25 @@ $(document).ready(function() {
       }
      }, "json");
   });
+
+  //For Select Options (drop-downs)
+  $("select#start_hour").change(function() {
+    var full_role = $(this).val();
+    var css_key = $(this).attr('name');
+    $.post("update_user_settings.php", { "key": css_key, "value": full_role },
+      function(data){
+      if(data.status == 'error'){
+        window.location = "<?echo $site_root;?>";
+      }
+      if(data.status == 'success'){
+        $("div#top_notifications").html("Prefrences saved. \"" + data.key + "\" set to \"" + data.value + "\"" );
+        $("div#top_notifications").addClass("notify");
+        $("div#top_notifications").addClass("alert-message");
+      }
+     }, "json");
+  });
+
+
 });
 </script>
 <?
@@ -54,9 +75,10 @@ echo "\n";
 
 echo "<div class=\"blah\">";
 
+echo "<div class=\"span4\">";
 echo "<form class=\"form-stacked\">";
 echo "<h2>Default Role</h2>\n";
-$current_default_role = dbo_CurrentUserValue($id, 'default_role');
+$current_default_role = getUserSettingValue($id, 'default_role');
 
 $results = getOus($id);
 if($results){
@@ -81,7 +103,7 @@ foreach($results as $item){
 }
 //Default View
 echo "<h2>Default View</h2>";
-$current_default_view = dbo_CurrentUserValue($id, 'default_view');
+$current_default_view = getUserSettingValue($id, 'default_view');
   
   foreach($view_array as $view){
     $full_role = $item['ou_code']."/".$role['role'];
@@ -100,7 +122,7 @@ $current_default_view = dbo_CurrentUserValue($id, 'default_view');
 
 //Default Time Slot Size
 echo "<h2>Default Time Slot Size</h2>";
-$current_default_view = dbo_CurrentUserValue($id, 'slot_size');
+$current_default_view = getUserSettingValue($id, 'slot_size');
   
   foreach($slot_array as $slot){
     $full_role = $item['ou_code']."/".$role['role'];
@@ -115,10 +137,41 @@ $current_default_view = dbo_CurrentUserValue($id, 'slot_size');
     echo "</label>\n";
     //echo "<br />\n";
   }
+
+//Default Start Hour
+echo "<h2>Default Start Hour</h2>";
+$current_default_view = getUserSettingValue($id, 'start_hour');
+  
+  echo "<select name=\"start_hour\" id=\"start_hour\" >";
+  $c = 1;
+  while($c <= 24){
+    if($c > 12){
+      $display_hour = ($c - 12).":00 PM";
+    }
+    if($c < 12){
+      $display_hour = $c.":00 AM";
+    }
+    if($c == 12){
+      $display_hour = $c.":00 noon";
+    }
+    if($c == 24){
+      $display_hour = ($c - 12).":00 AM";
+    }
+
+    $full_role = $item['ou_code']."/".$role['role'];
+    echo "<option value=\"$c\" ";
+      if($c == $current_default_view){
+        echo "SELECTED ";
+      }
+    echo ">$display_hour\n";
+    $c++;
+  }
+  echo "</select>";
 ?>
+<br /><br />
+<a href="index.php" class="btn primary">Done</a>
   </div>
 </div>
-<a href="index.php" class="btn primary">Done</a>
 </form>
 
 </div>

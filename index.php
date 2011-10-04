@@ -20,6 +20,11 @@ if($slot_size == ""){
   $slot_size = 15;
 }
 
+$start_hour = getUserSettingValue($id, 'start_hour');
+if($start_hour == ""){
+  //Default Start Hour
+  $start_hour = 8;
+}
 
 function parseDateForJS($date){
   $return = array(
@@ -68,22 +73,6 @@ echo $full_calendar_links;
 	$(document).ready(function() {
 $(".bookit-charter").css('color','green');
 
-$("#drop").mouseover(function() {
-  $(this).css('cursor', 'pointer');
-});
-
-$("#drop").draggable({
-  zIndex: 999,
-  revert: "invalid",
-  drop: function( event, ui ) {
-    $( this )
-      .addClass( "ui-state-highlight" )
-      .find( "p" )
-      .html( "Dropped!" );
-      alert('A');
-  }
-});
-	
 $.strPad = function(i,l,s) {
 	var o = i.toString();
 	if (!s) { s = '0'; }
@@ -92,23 +81,14 @@ $.strPad = function(i,l,s) {
 	}
 	return o;
 };
-//alert(new Date(2008, 1, 20, 14, 30));
 		var date = new Date();
 		var d = date.getDate();
 		var m = date.getMonth();
 		var y = date.getFullYear();
 		
-//alert (new Date(y, m, d));
-//alert (new Date(2010,10,10));
-//alert(new date('12345634'));
 
 	$('#calendar').fullCalendar(
 {
-/*
- viewDisplay: function(view) {
-        alert('The new title of the view is ' + view.title);
-    },
-*/
 			header: {
 				left: null,
 				center: 'title',
@@ -131,25 +111,16 @@ dayClick: function(date, allDay, jsEvent, view) {
   var string_time = curr_hour + ":" + $.strPad(curr_min, 2);
 
         if (allDay) {
-            //alert('Clicked on the entire day: ' + date);
-            //window.location.href = "new_appt.php?date=" + string_date + "&time=09:00";
             window.location.href = "?date=" + string_date + "&view=agendaDay";
         }else{
             window.location.href = "new_appt.php?date=" + string_date + "&time=" + string_time;
-            //alert('Clicked on the slot: ' + date.format("isoDateTime"));
         }
 
-        //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-        //alert('Current view: ' + view.name);
-
-        // change the day's background color just for fun
-        //$(this).css('background-color', 'red');
 
     },
 defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $slot_size;?>,
-firstHour: 8,
+firstHour: <?echo $start_hour;?>,
   events: [
 <?
 
@@ -201,7 +172,6 @@ font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 <div class="container">
 <?
 
-//print_r(getLdapPersonInfo($id));
 drawHeader($id);
 drawCalControld($selected_date, $view);
 ?>
@@ -213,11 +183,6 @@ drawCalControld($selected_date, $view);
 <!--TODO remove demo-->
 <div class="alert-message"><a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br /></div>
 <h2>Departments</h2>
-<ul>
-<li>Dept 1</li>
-<li><?echo mt_rand();?></li>
-<li><div id="drop" class="alert-message">Drag and <br />drop </div></li>
-</ul>
 </div>
 <div id='calendar' class="main"></div>
 

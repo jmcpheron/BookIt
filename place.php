@@ -20,6 +20,11 @@ if($slot_size == ""){
   $slot_size = 15;
 }
 
+$start_hour = getUserSettingValue($id, 'start_hour');
+if($start_hour == ""){
+  $start_hour = 8;
+}
+
 
 $sid = fixString($_GET['sid']);
 $sou = fixString($_GET['sou']);
@@ -127,6 +132,7 @@ dayClick: function(date, allDay, jsEvent, view) {
     },
 defaultView: '<?echo $view;?>',
 slotMinutes: <?echo $slot_size;?>,
+firstHour: <?echo $start_hour;?>,
   events: [
 <?
 $open_appts = getOpenAppointments($sou, $srole, $start_day, $end_day, $id, $ou, $role);
