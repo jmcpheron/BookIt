@@ -403,4 +403,10 @@ function getUserSettingValue($id, $setting_name){
   $results = dbo_CurrentUserValue($id, $setting_name);
   return $results;
 }
+
+function getOuLongName($ou){
+  $results = dbo_ouLongName($ou);
+  return $results;
+}
+
 ?>

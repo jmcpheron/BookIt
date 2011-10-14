@@ -17,6 +17,7 @@ $jquery_path = "/bookit/extermal_libs/fullcalendar-1.5.1/jquery/jquery-1.5.2.min
 $jquery_ui_path = "/bookit/extermal_libs/fullcalendar-1.5.1/jquery/jquery-ui-1.8.11.custom.min.js";
 
 $jquery_timePicker_path = "/bookit/extermal_libs/timePicker/jquery.timePicker.min.js";
+$jquery_timePicker_css = "/bookit/extermal_libs/timePicker/timePicker.css";
 
 $full_cal_path = "/bookit/extermal_libs/fullcalendar-1.5.1/fullcalendar";
 

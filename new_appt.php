@@ -48,6 +48,7 @@ if($_POST){
 <?
 echo $common_css;
 ?>
+<link rel='stylesheet' type='text/css' href='<?echo $jquery_timePicker_css;?>' />
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type="text/javascript" src="<?echo $jquery_timePicker_path;?>"></script> 
 <script type="text/javascript"> 
@@ -107,23 +108,24 @@ $(document).ready(function() {
 </script> 
 </head>
 <body>
-<div class="containr">
+<div class="container">
 <?
 drawHeader($id);
 
-
-echo "<h3>$ou</h3>";
+$long_name = getOuLongName($ou);
+echo "<h3>$long_name [$ou]</h3>";
 ?>
 
 <form name="new_appt" method="post" action="" class="form-stacked">
-Title: <input type=text name="title" id="title" /><br />
+Title: <input type=text name="title" id="title" /><br /><br />
 Role: <select name="role">
 <?
 drawRolesSelection($id, $ou, $role);
 ?>
 </select>
+<br /><br />
 <div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" class="span2" /> 
-End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" /></div>
+End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" class="span2" /></div>
 <input type=hidden name="date" value="<?echo $date;?>"><br />
 <input type=hidden name="ou_code" value="<?echo $ou;?>"><br />
 <input type=submit value="Save" class="btn primary"/> &nbsp;

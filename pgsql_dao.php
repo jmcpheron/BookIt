@@ -461,4 +461,14 @@ and s.id is not null
   $results = db_query($sql);
   return $results[0]['count'];
 }
+
+function dbo_ouLongName($ou){
+  $sql = "
+select long_name
+from ous
+where ou_code = '$ou'
+  ";
+  $results = db_query($sql);
+  return $results[0]['long_name'];
+}
 ?>
