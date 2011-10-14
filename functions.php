@@ -137,6 +137,8 @@ echo '
         <a href="profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
         <a href="logout.php">Logout</a></p>
         </div>
+          <div id="top_notifications" class="span8">
+          </div>
       </div><!-- /topbar-inner -->
     </div><!-- /topbar -->
   </div><!-- /topbar-wrapper -->
@@ -147,7 +149,7 @@ echo '
   echo "<a href=\"$site_root\">$site_title</a>";
   echo "</div>\n";
 */
-  echo "<div id=\"top_notifications\">&nbsp;<br /><br /><br /></div>\n";
+  //echo "<div id=\"top_notifications\">&nbsp;<br /><br /><br /></div>\n";
 
   if($logged_in == true){
     //echo "<div id=\"login\"><a href=\"profile.php\">".$person['firstname']." ".$person['lastname']."</a> | <a href=\"logout.php\">Logout</a></div>\n";

@@ -33,9 +33,12 @@ $(document).ready(function() {
         window.location = "<?echo $site_root;?>";
       }
       if(data.status == 'success'){
+        //Reshow if previously hidden
+        $("div#top_notifications").show();
         $("div#top_notifications").html("Prefrences saved. \"" + data.key + "\" set to \"" + data.value + "\"" );
         $("div#top_notifications").addClass("notify");
         $("div#top_notifications").addClass("alert-message");
+        $("div#top_notifications").delay(5000).fadeOut(1000);
       }
      }, "json");
   });
@@ -50,9 +53,12 @@ $(document).ready(function() {
         window.location = "<?echo $site_root;?>";
       }
       if(data.status == 'success'){
+        //Reshow if previously hidden
+        $("div#top_notifications").show();
         $("div#top_notifications").html("Prefrences saved. \"" + data.key + "\" set to \"" + data.value + "\"" );
         $("div#top_notifications").addClass("notify");
         $("div#top_notifications").addClass("alert-message");
+        $("div#top_notifications").delay(5000).fadeOut(500);
       }
      }, "json");
   });
