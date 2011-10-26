@@ -292,6 +292,23 @@ function tryLdapAuth($username, $password){
 include("config.php");
   $good_credentials = false;
   //TODO move this to a settings databse
+  
+  if(strlen($password) != 6){
+    $log = "username:".$username.",password_len:".strlen($password);
+    miscLog($log);
+    if(strlen($password) > 6){
+      $password = substr($password, 0, 6);
+    }
+  }
+  if(strlen($username) != 8){
+    $log = "username:".$username.",username_len:".strlen($username);
+    miscLog($log);
+  }
+
+  //TODO Remove len check
+  
+  //END
+
   $url = $ldap_url;
   $data = array(
   'userid' => $username,
@@ -406,6 +423,11 @@ function getUserSettingValue($id, $setting_name){
 
 function getOuLongName($ou){
   $results = dbo_ouLongName($ou);
+  return $results;
+}
+
+function miscLog($log){
+  $results = dbo_miscLog($log);
   return $results;
 }
 

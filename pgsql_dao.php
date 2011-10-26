@@ -471,4 +471,12 @@ where ou_code = '$ou'
   $results = db_query($sql);
   return $results[0]['long_name'];
 }
+
+function dbo_miscLog($log){
+  $sql = "
+  INSERT INTO log (log) VALUES ('$log')
+  ";
+  $results = db_query($sql);
+  return $results;
+}
 ?>
