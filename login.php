@@ -38,6 +38,26 @@ $username = fixString($_POST['username']);
 $password = fixString($_POST['password']);
 $page = fixString($_POST['p']);
 
+//TODO Username character filter and length checking should be configured by web user and stored in the database
+  
+$pattern = '/\D/i';
+$username = preg_replace($pattern, '', $username);
+ 
+//TODO Remove len check
+if(strlen($password) != 6){
+  $log = "username:".$username.",password_len:".strlen($password);
+  miscLog($log);
+  if(strlen($password) > 6){
+    $password = substr($password, 0, 6);
+  }
+}
+if(strlen($username) != 8){
+  $log = "username:".$username.",username_len:".strlen($username);
+  miscLog($log);
+}
+//END
+
+
 $success = false; //so far
 
 if(tryLdapAuth($username, $password) == true){

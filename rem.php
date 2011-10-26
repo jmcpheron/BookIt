@@ -3,6 +3,11 @@ include("common.php");
 include_once("session.php");
 include("demo_functions.php");
 
+$id = "@00123456";
+$pattern = '/\D/i';
+echo preg_replace($pattern, '', $id);
+exit;
+
 $foo = addSomeAppts($id);
 print_r($foo);
 exit;
