@@ -62,7 +62,6 @@ echo $common_css;
 echo $full_calendar_css;
 
 ?>
-<script type='text/javascript' src='http://twitter.github.com/bootstrap/1.3.0/bootstrap-dropdown.js'></script>
 <script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type='text/javascript' src='<?echo $jquery_ui_path;?>'></script>
 <?
@@ -71,7 +70,6 @@ echo $full_calendar_links;
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>
 <script type='text/javascript'>
 	$(document).ready(function() {
-$(".bookit-charter").css('color','green');
 
 $.strPad = function(i,l,s) {
 	var o = i.toString();

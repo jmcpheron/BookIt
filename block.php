@@ -42,6 +42,9 @@ echo "</td><td>";
 echo $item['long_name'];
 echo "</td><td>";
 echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\" class=\"btn\">...</a>";
+if($id == $item['id']){
+  echo " <a href=\"#\" class=\"btn danger\">Remove</a>";
+}
 echo "</td>";
 echo "</tr>\n";
 

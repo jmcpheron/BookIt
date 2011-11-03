@@ -334,7 +334,8 @@ return $results;
 
 }
 
-function dboUpdateUserSettings($id, $key, $value){
+function dboUpdateUserSettings($id, $key, $value, $sub_value = null){
+  if(!$sub_value) {
   $sql = "
   UPDATE user_settings
   SET active = '0',
@@ -353,10 +354,41 @@ function dboUpdateUserSettings($id, $key, $value){
   ('$id', '$key', '$value')
   ";
   $return = db_query($sql);
+  }else{
+  $sql = "
+  UPDATE user_settings
+  SET active = '0',
+  deleted_by = '$id',
+  deleted_ts = ('now'::text)::timestamp with time zone	
+  WHERE key = '$key'
+  AND id = '$id'
+  AND value = '$value'
+  AND active = '1'
+  ";
+
+  //Try it with just a delete. Why do we need to save a history of user settings?
+  $sql = "
+  delete from  user_settings
+  WHERE key = '$key'
+  AND id = '$id'
+  AND value = '$value'
+  ";
+  db_query($sql);
+
+  $sql = "
+  INSERT INTO user_settings
+  (id, key, value, sub_value)
+  VALUES
+  ('$id', '$key', '$value', '$sub_value')
+  ";
+  $return = db_query($sql);
+
+  }
   return $return;
 }
 
-function dbo_CurrentUserValue($id, $key){
+function dbo_CurrentUserValue($id, $key, $value = null){
+  if(!$value){
   $sql = "
   SELECT value
   FROM user_settings
@@ -366,6 +398,19 @@ function dbo_CurrentUserValue($id, $key){
   ";
   $return = db_query($sql);
   return $return[0]['value'];
+  }else{
+  $sql = "
+  SELECT sub_value as value
+  FROM user_settings
+  WHERE key = '$key'
+  and id = '$id'
+  and value = '$value'
+  and active = '1'
+  ";
+  $return = db_query($sql);
+  return $return[0]['value'];
+
+  }
 }
 
 function dbo_getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $role = null){

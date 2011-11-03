@@ -19,6 +19,10 @@ $jquery_ui_path = "/bookit/extermal_libs/fullcalendar-1.5.1/jquery/jquery-ui-1.8
 $jquery_timePicker_path = "/bookit/extermal_libs/timePicker/jquery.timePicker.min.js";
 $jquery_timePicker_css = "/bookit/extermal_libs/timePicker/timePicker.css";
 
+$jquery_color_picker_path = "/bookit/extermal_libs/colour-picker/jquery.colourPicker.js";
+$jquery_color_picker_css = "/bookit/extermal_libs/colour-picker/jquery.colourPicker.css";
+$jquery_color_picker_gif = "/bookit/extermal_libs/colour-picker/jquery.colourPicker.gif";
+
 $full_cal_path = "/bookit/extermal_libs/fullcalendar-1.5.1/fullcalendar";
 
 $full_calendar_css = "<link rel='stylesheet' type='text/css' href='$full_cal_path/fullcalendar.css' />";

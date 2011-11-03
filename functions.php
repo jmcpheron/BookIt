@@ -137,7 +137,7 @@ echo '
         <a href="profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
         <a href="logout.php">Logout</a></p>
         </div>
-          <div id="top_notifications" class="span8">
+          <div id="top_notifications" class="span8 offset4">
           </div>
       </div><!-- /topbar-inner -->
     </div><!-- /topbar -->
@@ -200,7 +200,7 @@ function drawMyAppointmentsMonth($id, $day, $ou_code = null, $role = null, $clas
       $return.= "end: new Date(".$appt['end_time']."),\n";
       $return.= "url: 'block.php?bid=".$appt['bid']."',\n";
       $return.= "className: ['".$appt['ou_code']."-".$appt['role']."'],\n";
-      $return.= "color: '".$appt['color']."',\n";
+      $return.= "color: '#".$appt['color']."',\n";
       //$return.= "backgroundColor: 'darkred',\n";
       //$return.= "textColor: 'darkred',\n";
       $return.= "allDay: false";
@@ -225,7 +225,7 @@ function drawBlockByBid($bid, $page = null, $id = null){
     $return = "";
     foreach($appointments as $appt){
       //Set initial color from ou/role settings 
-      $color = $appt['color'];
+      $color = "#".$appt['color'];
 
       //Check if a rule overrides this color setting
       $full = dbo_isBidFull($bid);
@@ -402,8 +402,8 @@ function getRangeOfAppointments($id, $start_day, $end_day, $ou_code = null, $rol
   return $results;
 }
 
-function getUserSettingValue($id, $setting_name){
-  $results = dbo_CurrentUserValue($id, $setting_name);
+function getUserSettingValue($id, $setting_name, $value = null){
+  $results = dbo_CurrentUserValue($id, $setting_name, $value);
   return $results;
 }
 
@@ -416,5 +416,4 @@ function miscLog($log){
   $results = dbo_miscLog($log);
   return $results;
 }
-
 ?>

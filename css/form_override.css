@@ -1,0 +1,4 @@
+form {}
+form .input{}
+.uneditable-input{}
+.input-large,input.large,textarea.large,select.large{width:10px;}

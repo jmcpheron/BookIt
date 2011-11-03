@@ -20,9 +20,17 @@ if($logged_in == false){
 }
 $key = fixString($_POST['key']);
 $value = fixString($_POST['value']);
-dboUpdateUserSettings($id, $key, $value);
+$sub_value = fixString($_POST['sub_value']);
+if(!$sub_value){
+  $sub_value = null;
+}
+dboUpdateUserSettings($id, $key, $value, $sub_value);
 
+if(!$sub_value){
 echo '{"status":"success","key":"'.$key.'","value":"'.$value.'"}';
+}else{
+echo '{"status":"success","key":"'.$key.'","value":"'.$value.'", "sub_value":"'.$sub_value.'"}';
+}
 
 exit;
 
