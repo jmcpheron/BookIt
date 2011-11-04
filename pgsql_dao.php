@@ -524,4 +524,15 @@ function dbo_miscLog($log){
   $results = db_query($sql);
   return $results;
 }
+
+function dbo_getUserRole($bid, $id){
+  $sql = "
+  select ou_code, role, id 
+  from participants 
+  where bid = '$bid'
+  and id = '$id'
+  ";
+  $result = db_query($sql);
+  return $result[0];
+}
 ?>

@@ -1,18 +1,12 @@
 <?
+include("dbo_permission_settings.php");
 
 function canIDoThis($myinfo, $their_info, $permission){
 
+  
   //Assume false
   $return = false;
-
-$sql = "
-select *
-from role_permissions
-where ou = '".$myinfo['ou_code']."'
-and role = '".$myinfo['role']."'
-and permissions = '$permission'
-";
-  $results = db_query($sql);
+  $results = dbo_rolePermissions($myinfo['ou_code'], $myinfo['role'], $permission);
   if($results){
     foreach($results as $item){
       $affected = $item['affected'];

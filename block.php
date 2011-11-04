@@ -1,6 +1,7 @@
 <?
 include("common.php");
 include_once("session.php");
+include("permission_functions.php");
 $bid = fixString($_GET['bid']);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -20,7 +21,10 @@ $info = getBlockGeneral($id, $bid);
 echo "<h3>".$info[0]['title']."</h3>";
 echo "<h4>".$info[0]['start_time']."</h4>";
 
+//Figure out what the user's current role on the block is
+$myRole = userCurrentRoleInBlock($bid, $id);
 
+//Since we'll list the participants, let's figure out the current user's abilities
 
 $details = getBlockDetails($id, $bid);
 echo "<hr />Participants";
@@ -42,8 +46,8 @@ echo "</td><td>";
 echo $item['long_name'];
 echo "</td><td>";
 echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\" class=\"btn\">...</a>";
-if($id == $item['id']){
-  echo " <a href=\"#\" class=\"btn danger\">Remove</a>";
+if(canIDoThis($myRole, $item, 'remove_participant') == true){
+  echo " <a href=\"#\" class=\"btn danger pull-right\">Remove</a>";
 }
 echo "</td>";
 echo "</tr>\n";

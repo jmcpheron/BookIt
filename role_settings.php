@@ -23,8 +23,8 @@ echo $common_css;
 <div class="content main">
 <?
 drawHeader($id);
+
 ?>
-Nothing to see here yet
 </div>
 </div>
 </body>

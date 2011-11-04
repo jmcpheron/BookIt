@@ -416,4 +416,10 @@ function miscLog($log){
   $results = dbo_miscLog($log);
   return $results;
 }
+
+function userCurrentRoleInBlock($bid, $id){
+  //Returns the user's id, ou and role in specified block
+  $result = dbo_getUserRole($bid, $id);
+  return $result;
+}
 ?>
