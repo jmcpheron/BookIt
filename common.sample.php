@@ -13,7 +13,7 @@ $site_title = "Book It - Scheduling System";
 //Adding something random here will increse security. I recommend https://www.grc.com/passwords.htm
 $salt = "";
 
-$jquery_path = "/bookit/extermal_libs/fullcalendar-1.5.1/jquery/jquery-1.5.2.min.js";
+$jquery_path = "/BookIt/extermal_libs/jquery/jquery-1.7.min.js";
 $jquery_ui_path = "/bookit/extermal_libs/fullcalendar-1.5.1/jquery/jquery-ui-1.8.11.custom.min.js";
 
 $jquery_timePicker_path = "/bookit/extermal_libs/timePicker/jquery.timePicker.min.js";
@@ -48,6 +48,7 @@ $view_array = array('month', 'agendaWeek', 'agendaDay');
 
 $common_css = "
 <link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
-<link rel='stylesheet' href='http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css'>
+<link rel='stylesheet' type='text/css' href='css/bootstrap-1.4.0.min.css'>
+<link rel='stylesheet' type='text/css' href='".$site_root."main.css' />
 ";
 ?>
