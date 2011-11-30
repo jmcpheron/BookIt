@@ -4,7 +4,6 @@ include("common.php");
 
 //Make it just a web form if someone loads the page without a POST
 if(!$_POST){
-
 $page = fixString($_GET['page']);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -40,7 +39,7 @@ $page = fixString($_POST['p']);
 
 //TODO Username character filter and length checking should be configured by web user and stored in the database
   
-$pattern = '/\D/i';
+$pattern = '/[^a-z0-9]/i';
 $username = preg_replace($pattern, '', $username);
  
 //TODO Remove len check
@@ -83,7 +82,6 @@ if(tryLdapAuth($username, $password) == true){
   //echo "Error. Could be a bad username or password";
 }
 
-
 //Try local password
 if(checkLogin($username, $password) == true){
   session_start();
@@ -95,7 +93,6 @@ if(checkLogin($username, $password) == true){
   header("Location: http://$page");
 }
 
-//Try to insert or update Person Info
 
 if($success == false){
 

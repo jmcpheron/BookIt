@@ -3,8 +3,15 @@ include("common.php");
 include_once("session.php");
 include("demo_functions.php");
 
-$id = "@00123456";
 $pattern = '/\D/i';
+$pattern = '/[^a-z0-9]/i';
+$id = "@00123456";
+echo preg_replace($pattern, '', $id);
+echo "<br />";
+$id = "00123456";
+echo preg_replace($pattern, '', $id);
+$id = "demo0001";
+echo "<br />";
 echo preg_replace($pattern, '', $id);
 exit;
 

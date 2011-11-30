@@ -387,6 +387,34 @@ function dboUpdateUserSettings($id, $key, $value, $sub_value = null){
   return $return;
 }
 
+
+function dboUpdateRolePermissions($ou, $role, $key, $value){
+  $return = "unknown_error";
+  $sql = "
+  SELECT *
+  FROM role_permissions
+  WHERE ou = '$ou'
+  AND role = '$role'
+  AND permissions = '$key'
+  AND affected = '$value'
+  ";
+  $results = db_query($sql);
+  if(strlen($results[0]['permissions']) > 0){
+    $return = "already_set";
+  }else{
+    $sql = "
+    INSERT INTO 
+    role_permissions
+    (ou, role, permissions, affected, allow)
+    VALUES
+    ('$ou', '$role', '$key', '$value', '1')
+    ";
+    db_query($sql);
+    $return = "set";
+  }
+  return $return;
+}
+
 function dbo_CurrentUserValue($id, $key, $value = null){
   if(!$value){
   $sql = "

@@ -1,6 +1,7 @@
 <?
 include("common.php");
 include_once("session.php");
+include("permission_functions.php");
 $date = fixString( $_GET['date'] );
 $time = fixString( $_GET['time'] );
 
@@ -57,15 +58,27 @@ $('.jquery-colour-picker-example select').colourPicker({
   //On Click Event
   $("ul.tabs li").click(function() {
 
-  $("ul.tabs li").removeClass("active"); //Remove any "active" class
-  $(this).addClass("active"); //Add "active" class to selected tab
-  $(".tab_content").hide(); //Hide all tab content
+    $("ul.tabs li").removeClass("active"); //Remove any "active" class
+    $(this).addClass("active"); //Add "active" class to selected tab
+    $(".tab_content").hide(); //Hide all tab content
 
-  var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-  $(activeTab).fadeIn(); //Fade in the active ID content
-  return false;
+    var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+    $(activeTab).fadeIn(); //Fade in the active ID content
+    //return false;
   });
 
+  //On load
+  if(window.location.hash){
+    var this_hash = window.location.hash + '-tab';
+
+    $("ul.tabs li").removeClass("active"); //Remove any "active" class
+    $(this_hash).addClass("active"); //Add "active" class to selected tab
+    $(".tab_content").hide(); //Hide all tab content
+
+    var activeTab = $(this_hash).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+    $(activeTab).fadeIn(); //Fade in the active ID content
+    //return false;
+  }
   //For radio buttons
   $("input:radio").click(function() {
     var full_role = $(this).attr('id');
@@ -127,8 +140,9 @@ echo "<div class=\"blah span14\">\n";
 
 ?>
 <ul class="tabs">
-  <li><a href="#settings">Settings</a></li>
-  <li><a href="#roles">Roles</a><li>
+  <li id="settings-tab"><a href="#settings">Settings</a></li>
+  <li id="roles-tab"><a href="#roles">Roles</a><li>
+  <li id="admin-tab"><a href="#admin">Admin</a><li>
 </ul>
 <?
 
@@ -211,12 +225,15 @@ echo "<form class=\"form-stacked\" id=\"roles\">\n";
 echo "<h2>Default Role</h2>\n";
 $current_default_role = getUserSettingValue($id, 'default_role');
 
-$results = getOus($id);
-if($results){
-foreach($results as $item){
-  echo "<h3>".$item['long_name']."</h3>\n";
-  echo "<br />\n";
+$ous = getOus($id);
+
+if($ous){
+foreach($ous as $item){
+  $ou_long_name[$item['ou_code']] = $item['long_name'];
   $roles = getRoles($id, $item['ou_code']);
+  echo "<h3>".$item['long_name'];
+  echo "</h3>\n";  
+  echo "<br />\n";
   
   foreach($roles as $role){
     $full_role = $item['ou_code']."/".$role['role'];
@@ -311,6 +328,20 @@ echo '
 }
 echo "</form>";
 ?>
+  </div>
+
+  <div class="span8 tab_content" id="admin">
+<?
+$results = listOusWithPermission($id, 'admin');
+  foreach($results as $ou){
+    echo "<h3>".$ou_long_name[$ou['ou']]."</h3>";
+
+    $roles = listRolesInOu($ou['ou']);
+    foreach($roles as $role){
+      echo "<h4><a href=\"admin.php?ou=".$ou['ou']."&role=".$role['role']."\">".$role['long_name']."</a></h4>";
+    }
+  }
+?> 
   </div>
 
   <div class="row span14">

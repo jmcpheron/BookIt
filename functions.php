@@ -107,35 +107,27 @@ function drawHeader($id){
   include("session.php");
   $person = dbo_person($id);
 
+  $request_uri = $_SERVER['REQUEST_URI'];
+  $path = explode("/", $request_uri);
+  $p = 2;
 echo '
   <div class="topbar-wrapper" style="z-index: 5;">
     <div class="topbar" data-dropdown="dropdown" >
       <div class="topbar-inner">
         <div class="container">
           <h3><a href="'.$site_root.'">'.$site_title.'</a></h3>
-<!--
-          <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle">Dropdown</a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Secondary link</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Another link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form class="pull-left" action="">
-            <input type="text" placeholder="Search" />
-          </form>
--->
+          <p class="pull-left">
+';
+  while($p < count($path) - 1){
+    echo " > <a href=\"".$site_root.$build_path.$path[$p]."\">".ucfirst($path[$p])."</a> ";
+    $build_path.=$path[$p]."/";
+    $p++;
+  }
+echo '
+        </p>
         <p class="pull-right">Logged in as 
-        <a href="profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
-        <a href="logout.php">Logout</a></p>
+        <a href="'.$site_root.'profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
+        <a href="'.$site_root.'logout.php">Logout</a></p>
         </div>
           <div id="top_notifications" class="span8 offset4">
           </div>
@@ -159,7 +151,7 @@ echo '
   echo "
 Please Login using your MyGateway ID and PIN<br />
 <form action=\"".$site_root."login.php\" method=post>
-<input type=\"hidden\" name=\"p\" value=\"$page\"/>
+<input type=\"hidden\" class=\"g\" value=\"$page\"/>
 Username: <input type=\"text\" name=\"username\" value=\"$uname\"/>
 Password: <input type=\"password\" name=\"password\" />
 <input type=\"submit\" value=\"Login\" />

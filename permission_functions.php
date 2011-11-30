@@ -1,7 +1,7 @@
 <?
 include("dbo_permission_settings.php");
 
-function canIDoThis($myinfo, $their_info, $permission){
+function canIDoThisToThem($myinfo, $their_info, $permission){
 
   
   //Assume false
@@ -27,5 +27,47 @@ return $return;
 
 }
 
+function listOusWithPermission($id, $permission){
+  $results = dbo_listOusWithPermission($id, $permission);
+  if(!$results){
+    $results = array();
+  }
+  return $results;
+
+}
+
+function listRolesInOu($ou){
+  $results = dbo_listRolesInOu($ou);
+  if(!$results){
+    $results = array();
+  }
+  return $results;
+}
+
+function listRolePermissions($ou, $role){
+  $results = dbo_listRolePermissions($ou, $role);
+  if(!$results){
+    $results = array();
+  }
+  return $results;
+}
+
+function listAvailablePermissions(){
+  $results = dbo_listAvilablePermissions($ou, $role);
+  if(!$results){
+    $results = array();
+  }
+  return $results;
+
+}
+
+function deleteRolePermission($ou, $role, $permission, $affected){
+  $results = dbo_deleteRolePermission($ou, $role, $permission, $affected);
+  if(!$results){
+    $results = array();
+  }
+  return $results;
+
+}
 
 ?>
