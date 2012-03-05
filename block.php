@@ -47,7 +47,7 @@ echo $item['long_name'];
 echo "</td><td>";
 echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\" class=\"btn\">...</a>";
 if(canIDoThisToThem($myRole, $item, 'remove_participant') == true){
-  echo " <a href=\"#\" class=\"btn danger pull-right\">Remove</a>";
+  echo " <a href=\"remove_participant.php?bid=$bid&uid=".$item['id']."\" class=\"btn danger pull-right\">Remove</a>";
 }
 echo "</td>";
 echo "</tr>\n";

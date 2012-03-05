@@ -338,7 +338,9 @@ $results = listOusWithPermission($id, 'admin');
 
     $roles = listRolesInOu($ou['ou']);
     foreach($roles as $role){
-      echo "<h4><a href=\"admin.php?ou=".$ou['ou']."&role=".$role['role']."\">".$role['long_name']."</a></h4>";
+      echo "<h4>".$role['long_name']."</h4>";
+      echo "<a href=\"permissions.php?ou=".$ou['ou']."&role=".$role['role']."\">Permissions</a> | ";
+      echo "<a href=\"users.php?ou=".$ou['ou']."&role=".$role['role']."\">Users</a> | ";
     }
   }
 ?> 

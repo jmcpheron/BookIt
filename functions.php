@@ -210,7 +210,7 @@ function getOpenAppointments($ou_code = null, $role = null, $start_day, $end_day
   return $appointments;
 }
 
-function drawBlockByBid($bid, $page = null, $id = null){
+function drawBlockByBid($bid, $page = null, $id = null, $color_override = null){
 
   $appointments = dbo_getBid($bid,  $id);
   if($appointments){
@@ -225,6 +225,9 @@ function drawBlockByBid($bid, $page = null, $id = null){
         $color = 'darkred';
       }
       
+      if($color_override){
+        $color = "green";
+      }
 
       $return.= "{";
       $return.= "title: '".$appt['title']."',\n";
@@ -315,10 +318,10 @@ include("config.php");
 function getLdapPersonInfo($id){
 include("config.php");
   
-  $ds=ldap_connect($ldap_server);  // assuming the LDAP server is on this host
+  $ds=ldap_connect($ldap_server);
   
-      $r=ldap_bind($ds, $ldap_admin, $ldap_password);
-      if(!$r) die("ldap_bind failed<br>");
+  $r=ldap_bind($ds, $ldap_admin, $ldap_password);
+  if(!$r) die("ldap_bind failed<br>");
 
   //TODO make this generic and store it in the database or a config file
   //The filter may need to be a function or something

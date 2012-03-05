@@ -72,4 +72,20 @@ function dbo_deleteRolePermission($ou, $role, $permission, $affected){
   $return = db_query($sql);
   return $return;
 }
+
+function dbo_listUsersInROle($ou, $role, $limit, $offset = 0){
+  $sql = "
+  select p.id, p.firstname, p.middlename, p.lastname 
+  from ou_roles r
+  left join person p on (r.id = p.id)
+  where ou_code = '$ou'
+  and role = '$role'
+  and r.id != ''
+  order by lastname, firstname
+  limit $limit
+  offset $offset 
+  ";
+  $return = db_query($sql);
+  return $return;
+}
 ?>

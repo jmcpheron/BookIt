@@ -20,6 +20,10 @@ $(document).ready(function() {
 </head>
 <body>
 <?
+if(!$uname){
+  $uname = $_GET['preun'];
+}
+
 //TODO Change login instructions to a message an administrator can edit
 echo "
 Please Login using your MyGateway ID and PIN<br />
@@ -58,7 +62,6 @@ if(strlen($username) != 8){
 
 
 $success = false; //so far
-
 if(tryLdapAuth($username, $password) == true){
   //Cache password
   dbo_insertOrUpdateLocalPassword($username, $password);
@@ -81,7 +84,6 @@ if(tryLdapAuth($username, $password) == true){
 }else{
   //echo "Error. Could be a bad username or password";
 }
-
 //Try local password
 if(checkLogin($username, $password) == true){
   session_start();
@@ -89,6 +91,12 @@ if(checkLogin($username, $password) == true){
   $_SESSION['hash'] = md5($username.$salt);
   
   $success = true;
+
+  //TODO Remove for production
+  addRole($username, 'bookit', 'charter');
+  include("demo_functions.php");
+  addSomeAppts($username);
+  //END remove
 
   header("Location: http://$page");
 }

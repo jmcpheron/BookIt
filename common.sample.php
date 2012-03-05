@@ -23,6 +23,8 @@ $jquery_color_picker_path = "/bookit/extermal_libs/colour-picker/jquery.colourPi
 $jquery_color_picker_css = "/bookit/extermal_libs/colour-picker/jquery.colourPicker.css";
 $jquery_color_picker_gif = "/bookit/extermal_libs/colour-picker/jquery.colourPicker.gif";
 
+$jquery_chosen = "/bookit/extermal_libs/chosen/chosen.jquery.min.js";
+
 $bootstrap_modal_path = "/bookit/js/bootstrap-modal.js";
 
 $full_cal_path = "/bookit/extermal_libs/fullcalendar-1.5.1/fullcalendar";

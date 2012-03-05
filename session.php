@@ -14,7 +14,7 @@ $logged_in = true;
 }
 
 if($logged_in == false){
-  $page = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+  $page = urlencode($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
   header("Location: ".$site_root."login.php?page=$page");
   exit;
   

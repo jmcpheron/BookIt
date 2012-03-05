@@ -3,6 +3,7 @@
 function dbo_Search_Open_Appt($ou, $role, $start_day, $end_day, $by_id = null, $by_ou = null, $by_role = null){
   $sql = "
 select b.bid, b.title, p.role, p.key, cast(p.value as int),
+b.start_time, b.end_time,
 count(s.id)
 from blocks b
 left join properties p on (b.bid = p.bid)
@@ -24,8 +25,9 @@ if($by_role){
 $sql .= "
 and p.role = '$role'
 and p.key = 'max'
-group by b.bid, b.title, p.role, p.key, p.value
+group by b.bid, b.title, p.role, p.key, p.value, b.start_time, b.end_time
 having count(s.id) < cast(p.value as int)
+order by b.start_time
 ";
   $results = db_query($sql);
   return $results;

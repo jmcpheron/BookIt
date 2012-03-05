@@ -70,4 +70,14 @@ function deleteRolePermission($ou, $role, $permission, $affected){
 
 }
 
+function listUsersInRole($ou, $role, $limit, $offset = 6){
+  $results = dbo_listUsersInROle($ou, $role, $limit, $offset);
+  if(!$results){
+    $results = array();
+  }
+  
+  return $results;
+
+}
+
 ?>
