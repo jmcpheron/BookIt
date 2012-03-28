@@ -14,6 +14,7 @@ $(document).ready(function() {
   $("#form").submit(function(){
     $("#spinner").show();
     $("#ajax").html("");
+    $("#error").hide();
     var q = $("input[name=search]").val();
     $.getJSON(
       "rem_d.php?q=" + q,
@@ -24,6 +25,17 @@ $(document).ready(function() {
         for ( var i = 0; i < data.count; i++){
           $("#ajax").append("<a href='" + data[i].uid[0] + "'>" + data[i].displayname[0] + ' (@' + data[i].uid[0] + ')</a><br />');
         }
+
+       if(i >= 15){
+         $("#error").show();
+         $("#error").html('<div class="alert-message error">There may be more matches, try refining your search.</div>');
+       }
+       if(i == 0){
+         $("#error").show();
+         $("#error").html('<div class="alert-message ">No matches</div>');
+
+       }
+
       }
     );
 
@@ -53,6 +65,7 @@ drawHeader($id);
   </div>
 
   <div class="row">
+    <div id="error" class="span6 offset5"></div>
     <div class="span10 offset5" id="spinner" style="display:none;">
     <img src="images/ajax-loader.gif">
     </div>
