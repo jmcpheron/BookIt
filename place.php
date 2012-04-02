@@ -73,20 +73,18 @@ if($view == 'agendaDay'){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
+<?echo $common_js;?>
 <link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
 <?
 echo $common_css;
 echo $full_calendar_css;
-?>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
-<script type='text/javascript' src='<?echo $jquery_ui_path;?>'></script>
-<?
 echo $full_calendar_links;
 ?>
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>
 <script type='text/javascript'>
 $(document).ready(function() {
-	
+<?echo $common_jquery;?>
+
   $.strPad = function(i,l,s) {
     var o = i.toString();
     if (!s) { s = '0'; }
@@ -198,7 +196,7 @@ drawCalControld($selected_date, $view, $extra_array);
 <br />
 <br />
 <br />
-<div class="alert-message info">
+<div class="alert alert-info">
 
 <?
 echo "<a href=\"index.php?date=$selected_date\" class=\"close\">x</a>";

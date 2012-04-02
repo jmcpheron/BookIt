@@ -72,18 +72,33 @@ function drawCalControld($date, $current_view, $extra_array = null){
     $prev = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " - 1 day"));
     $next = date('Y-m-d', strtotime(date("Y-m-d", strtotime($date)) . " + 1 day"));
   }
-  $return.="<a class=\"btn info\" href=\"?date=$prev&view=$current_view&$query_string\">&larr;</a> ";
-  $return.="<a class=\"btn info\" href=\"?date=$next&view=$current_view&$query_string\">&raquo;</a> &nbsp; ";
+
+  $return.="<div class=\"row\">\n";
+  $return.="<div class=\"span12\">\n";
+
+    $return.="<div class=\"btn-group span2\">\n";
+    $return.="<a title=\"Today\" class=\"btn btn-info\" href=\"index.php\">Today</a> \n";
+    $return.="</div>\n";
+
+    $return.="<div class=\"btn-group span2\">\n";
+    $return.="<a title=\"Previous\" class=\"btn btn-info\" href=\"?date=$prev&view=$current_view&$query_string\"><i class=\"icon-arrow-left icon-white\"></i></a> \n";
+    $return.="<a title=\"Next\" class=\"btn btn-info\" href=\"?date=$next&view=$current_view&$query_string\"><i class=\"icon-arrow-right icon-white\"></i></a>\n";
+    $return.="</div>\n";
 
 
-  include("common.php");
-  foreach($view_array as $view){
-    if($current_view == $view){
-      $return.= "<a class=\"btn disabled\">$view</a> ";
-    }else{
-      $return.= "<a class=\"btn primary\" href=\"?date=$date&view=$view&$query_string\">$view</a> ";
+    include("common.php");
+    $return.="<div class=\"btn-group span4\">\n";
+    foreach($view_array as $view){
+      if($current_view == $view){
+        $return.= "<a class=\"btn disabled\">$view</a> \n";
+      }else{
+        $return.= "<a class=\"btn primary\" href=\"?date=$date&view=$view&$query_string\">$view</a> \n";
+      }
     }
-  }
+    $return.="</div>\n";
+  $return.="</div>\n";//End Span
+  $return.="</div>\n";//End Row
+
 echo  $return;
 }
 
@@ -111,11 +126,12 @@ function drawHeader($id){
   $path = explode("/", $request_uri);
   $p = 2;
 echo '
-  <div class="topbar-wrapper" style="z-index: 5;">
-    <div class="topbar" data-dropdown="dropdown" >
-      <div class="topbar-inner">
+    <div class="navbar navbar-fixed-top" >
+      <div class="navbar-inner">
         <div class="container">
-          <h3><a href="'.$site_root.'">'.$site_title.'</a></h3>
+          <h3><a href="'.$site_root.'" class="brand" >'.$site_title.'</a></h3>
+';
+/*
           <p class="pull-left">
 ';
   while($p < count($path) - 1){
@@ -125,15 +141,21 @@ echo '
   }
 echo '
         </p>
-        <p class="pull-right">Logged in as 
-        <a href="'.$site_root.'profile.php">'.$person['firstname'].' '.$person['lastname'].'</a> | 
-        <a href="'.$site_root.'logout.php">Logout</a></p>
+*/
+echo '  <div class="btn-group pull-right">
+        <button class="btn dropdown-toggle" data-toggle="dropdown">'.$person['firstname'].' '.$person['lastname'].'<span class="caret"></span></button>
+        <ul class="dropdown-menu">
+          <li><a href="'.$site_root.'profile.php"><i class="icon-user"></i> Profile</a></li> 
+          <li><a href="'.$site_root.'profile.php"><i class="icon-cog"></i> Settings</a></li> 
+          <li class="divider"></li>
+          <li><a href="'.$site_root.'logout.php"><i class="icon-off"></i> Logout</a></li>
+        </ul>
         </div>
           <div id="top_notifications" class="span8 offset4">
           </div>
-      </div><!-- /topbar-inner -->
-    </div><!-- /topbar -->
-  </div><!-- /topbar-wrapper -->
+      </div><!-- container?-->
+      </div><!-- /navbar-inner -->
+    </div><!-- /navbar -->
 ';
 
 /*

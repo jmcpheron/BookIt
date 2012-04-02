@@ -10,8 +10,14 @@ $bid = fixString($_GET['bid']);
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
 <?
+echo $common_js;
 echo $common_css;
 ?>
+<script type='text/javascript'>
+$(document).ready(function() {
+<?echo $common_jquery;?>
+});
+</script>
 </head>
 <body>
 <div class="container">
@@ -29,7 +35,7 @@ $myRole = userCurrentRoleInBlock($bid, $id);
 $details = getBlockDetails($id, $bid);
 echo "<hr />Participants";
 
-echo "<table border=\"1\" class=\"zebra-striped\">";
+echo "<table class=\"table table-striped table-condensed\">";
 echo "<thead><tr><th>Participant</th><th>Role</th><th>Attending</th><th>Attendaing from</th><th>Details</th></tr></thead>\n";
 echo "<tbody>";
 foreach($details as $item){
@@ -45,9 +51,9 @@ echo $item['attending'];
 echo "</td><td>";
 echo $item['long_name'];
 echo "</td><td>";
-echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\" class=\"btn\">...</a>";
+echo "<a href=\"participant_info.php?bid=$bid&uid=".$item['id']."\" class=\"btn btn-mini\">...</a>";
 if(canIDoThisToThem($myRole, $item, 'remove_participant') == true){
-  echo " <a href=\"remove_participant.php?bid=$bid&uid=".$item['id']."\" class=\"btn danger pull-right\">Remove</a>";
+  echo " <a href=\"remove_participant.php?bid=$bid&uid=".$item['id']."\" class=\"btn btn-danger btn-mini pull-right\"><i class=\"icon-trash icon-white\"></i> Remove</a>";
 }
 echo "</td>";
 echo "</tr>\n";
@@ -60,7 +66,7 @@ $properties = getBlockProperties($id, $bid);
 echo "<hr />Block Properties";
 if($properties){
 
-echo "<table border=\"1\">";
+echo "<table class=\"table table-striped table-condensed\" >";
 echo "<thead><tr><th>Role</th><th>key</th><th>Value</th></tr></thead>\n";
 echo "<tbody>";
 foreach($properties as $item){

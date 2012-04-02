@@ -64,7 +64,7 @@ echo "
   <div class=\"alert-actions\">
   <form action=\"\" method=\"post\">
   <input type=\"hidden\" name=\"bid\" value=\"$bid\">
-  <input type=\"submit\" class=\"btn btn-primary\" value=\"Add Student\"> 
+  <input type=\"submit\" class=\"btn small primary\" value=\"Add Student\"> 
   <a class=\"btn small\" href=\"$back_to_search\">Cancel</a>
   </form>
   </div>
@@ -79,7 +79,7 @@ echo "<h4>".$info[0]['start_time']."</h4>";
 $details = getBlockDetails($id, $bid);
 echo "<hr />Participants";
 
-echo "<table class=\"table table-bordered table-stripes table-condensed\">";
+echo "<table border=\"1\" class=\"zebra-stripes\">";
 echo "<thead><tr><th>Participant</th><th>Role</th><th>Attending</th><th>Attendaing from</th><th>Details</th></tr></thead>\n";
 echo "<tbody>";
 foreach($details as $item){
@@ -107,7 +107,7 @@ $properties = getBlockProperties($id, $bid);
 echo "<hr />Block Properties<br />";
 if($properties){
 
-echo "<table class=\"table table-bordered table-stripes table-condensed\">";
+echo "<table border=\"1\" class=\"zebra-stripes\">";
 echo "<thead><tr><th>Role</th><th>key</th><th>Value</th></tr></thead>\n";
 echo "<tbody>";
 foreach($properties as $item){

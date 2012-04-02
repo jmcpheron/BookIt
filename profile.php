@@ -20,12 +20,17 @@ if($_POST){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
+
+<?echo $common_js;?>
 <script type="text/javascript" src="<?echo $jquery_color_picker_path;?>"></script> 
+
 <link rel='stylesheet' type='text/css' href='<?echo $jquery_color_picker_css;?>' />
 <script type='text/javascript'>
 
 $(document).ready(function() {
+
+<?echo $common_jquery;?>
+
 $('.jquery-colour-picker-example select').colourPicker({
     ico:    '<?echo $jquery_color_picker_gif;?>',
     title:    false

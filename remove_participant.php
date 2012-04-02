@@ -25,9 +25,12 @@ $affected = fixString($_GET['v']);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
+<?
+echo $common_js;
+?>
 <script type='text/javascript'>
 $(document).ready(function() {
+<?echo $common_jquery;?>
 });
 </script>
 <?
@@ -52,7 +55,7 @@ $details = $details[0];
   <form action="" method="post" name="remove_participant">
   <input type="hidden" name="bid" value="<?echo $bid;?>" />
   <input type="hidden" name="uid" value="<?echo $uid;?>" />
-  <input type="submit" class="btn danger" value="Yes, Remove Participant" /> | <a href="block.php?bid=<?echo $bid;?>" class="btn" >Cancel</a>
+  <button type="submit" class="btn btn-danger" ><i class="icon-trash icon-white"></i> Yes, Remove Participant</button> | <a href="block.php?bid=<?echo $bid;?>" class="btn" >Cancel</a>
   </form>
   </div>
 </div>

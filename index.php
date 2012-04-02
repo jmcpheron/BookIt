@@ -57,21 +57,19 @@ if($view == 'agendaDay'){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?
+echo $common_js;
 echo $common_css;
 echo $full_calendar_css;
-
-?>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
-<script type='text/javascript' src='<?echo $jquery_ui_path;?>'></script>
-<?
 echo $full_calendar_links;
 ?>
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>
+<!--<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>-->
 <script type='text/javascript'>
-	$(document).ready(function() {
+$(document).ready(function() {
+<?echo $common_jquery;?>
 
-$.strPad = function(i,l,s) {
+  $.strPad = function(i,l,s) {
 	var o = i.toString();
 	if (!s) { s = '0'; }
 	while (o.length < l) {
@@ -147,7 +145,6 @@ $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['m
 <style type='text/css'>
 
 	body {
-text-align: center;
 font-size: 14px;
 font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 		}
@@ -167,22 +164,28 @@ font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
 <?
 
 drawHeader($id);
 drawCalControld($selected_date, $view);
 ?>
-<hr />
 
 <? $q =  $_SERVER['QUERY_STRING'];
 ?>
-<div id="controls" class="main sidebar">
-<!--TODO remove demo-->
-<div class="alert-message"><a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br /></div>
-<h2>Departments</h2>
-</div>
-<div id='calendar' class="main"></div>
+<div class="row">
+<hr />
+  <div id="controls" class="main sidebar span3">
+    <!--TODO remove demo-->
+    <div class="alert alert-message">
+      <a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br />
+    </div>
+  <h2>Departments</h2>
+  <br /><br /><br />
+  </div>
+  
+  <div id='calendar' class="main span9 hidden-phone"></div>
+</div><!--row-->
 
 </div>
 </body>
