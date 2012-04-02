@@ -46,13 +46,14 @@ if($_POST){
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
 <?
+echo $common_js;
 echo $common_css;
 ?>
 <link rel='stylesheet' type='text/css' href='<?echo $jquery_timePicker_css;?>' />
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
 <script type="text/javascript" src="<?echo $jquery_timePicker_path;?>"></script> 
 <script type="text/javascript"> 
 $(document).ready(function() {
+  <?echo $common_jquery;?>
   $("input[name=title]").focus();
 });
 
