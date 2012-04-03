@@ -11,7 +11,10 @@ $page = fixString($_GET['page']);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
+<?
+echo $common_js;
+echo $common_css;
+?>
 <script type='text/javascript'>
 $(document).ready(function() {
   $("input[name=username]").focus();
@@ -24,15 +27,45 @@ if(!$uname){
   $uname = $_GET['preun'];
 }
 
+//Unlogged in header
+echo '
+    <div class="navbar navbar-fixed-top" >
+      <div class="navbar-inner">
+        <div class="container">
+          <h3><a href="'.$site_root.'" class="brand" >'.$site_title.'</a></h3>
+        </p>
+      </div><!-- container?-->
+      </div><!-- /navbar-inner -->
+    </div><!-- /navbar -->
+';
+
 //TODO Change login instructions to a message an administrator can edit
+
+
 echo "
-Please Login using your MyGateway ID and PIN<br />
-<form action=\"".$site_root."login.php\" method=post>
-<input type=\"hidden\" name=\"p\" value=\"$page\"/>
-Username: <input type=\"text\" name=\"username\" value=\"$uname\"/>
-Password: <input type=\"password\" name=\"password\" />
-<input type=\"submit\" value=\"Login\" />
+<div class=\"span4\">
+<form action=\"".$site_root."login.php\" method=post class=\"form-vertical\">
+  <fieldset>
+    <legend>Please login using your MyGateway ID and PIN</legend>
+    <div class=\"control-group\">
+      <input type=\"hidden\" name=\"p\" value=\"$page\"/>
+      <label class=\"control-label\" for=\"username\">Username: </label>
+      <div class=\"controls\">
+        <input type=\"text\" name=\"username\" value=\"$uname\"/>
+      </div>
+    </div>
+
+
+    <div class=\"control-group\">
+      <label class=\"control-label\" for=\"password\">Password: </label>
+      <div class=\"controls\">
+        <input type=\"password\" name=\"password\" />
+      </div>
+    </div>
+  </fieldset>
+<input type=\"submit\" value=\"Login\" class=\"btn btn-primary\" />
 </form>
+</div>
 ";
 exit;
 }

@@ -97,8 +97,8 @@ $('.jquery-colour-picker-example select').colourPicker({
         //Reshow if previously hidden
         $("div#top_notifications").show();
         $("div#top_notifications").html("Prefrences saved. \"" + data.key + "\" set to \"" + data.value + "\"" );
-        $("div#top_notifications").addClass("notify");
-        $("div#top_notifications").addClass("alert-message");
+        $("div#top_notifications").addClass("alert-notify");
+        $("div#top_notifications").addClass("alert");
         $("div#top_notifications").delay(3000).fadeOut(500);
       }
      }, "json");

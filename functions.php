@@ -151,7 +151,7 @@ echo '  <div class="btn-group pull-right">
           <li><a href="'.$site_root.'logout.php"><i class="icon-off"></i> Logout</a></li>
         </ul>
         </div>
-          <div id="top_notifications" class="span8 offset4">
+          <div id="top_notifications" class="span8">
           </div>
       </div><!-- container?-->
       </div><!-- /navbar-inner -->
@@ -170,6 +170,7 @@ echo '  <div class="btn-group pull-right">
   }else{
   echo "<div id=\"login\">";
   //print_r($_SERVER);
+  echo $common_css;
   echo "
 Please Login using your MyGateway ID and PIN<br />
 <form action=\"".$site_root."login.php\" method=post>

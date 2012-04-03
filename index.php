@@ -175,7 +175,7 @@ drawCalControld($selected_date, $view);
 ?>
 <div class="row">
 <hr />
-  <div id="controls" class="main sidebar span3">
+  <div class="sidebar span2">
     <!--TODO remove demo-->
     <div class="alert alert-message">
       <a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br />
@@ -184,7 +184,7 @@ drawCalControld($selected_date, $view);
   <br /><br /><br />
   </div>
   
-  <div id='calendar' class="main span9 hidden-phone"></div>
+  <div id='calendar' class="span8 hidden-phone"></div>
 </div><!--row-->
 
 </div>
