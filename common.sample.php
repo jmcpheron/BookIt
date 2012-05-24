@@ -10,7 +10,7 @@ include_once("functions.php");
 $site_root = "http://example.com/bookit/";
 $site_title = "Book It - Scheduling System";
 
-//Adding something random here will increse security. I recommend https://www.grc.com/passwords.htm
+//Add something random here will increse security. I recommend https://www.grc.com/passwords.htm
 $salt = "";
 
 $jquery_path = "/BookIt/extermal_libs/jquery/jquery-1.7.min.js";
@@ -25,7 +25,10 @@ $jquery_color_picker_gif = "/bookit/extermal_libs/colour-picker/jquery.colourPic
 
 $jquery_chosen = "/bookit/extermal_libs/chosen/chosen.jquery.min.js";
 
+$bootstrap_js = "/bookit/extermal_libs/bootstrap/js/bootstrap.min.js";
 $bootstrap_modal_path = "/bookit/js/bootstrap-modal.js";
+$bootstrap_dropdown_path = "/bookit/extermal_libs/bootstrap/js/bootstrap-dropdown.js";
+$bootstrap_tabs_path = "/bookit/extermal_libs/bootstrap/js/bootstrap-tab.js";
 
 $full_cal_path = "/bookit/extermal_libs/fullcalendar-1.5.1/fullcalendar";
 
@@ -36,23 +39,19 @@ $full_calendar_links = "
 <script type='text/javascript' src='$full_cal_path/gcal.js'></script>
 ";
 
-//Controls specific to the fullcalendar project 
-//http://arshaw.com/fullcalendar/docs/views/Available_Views/
-/*
-FullCalendar has a number of different "views", or ways of displaying days and events. The following 5 views are all built in to FullCalendar:
-
-month - see example
-basicWeek - see example (available since version 1.3)
-basicDay - see example (available since version 1.3)
-agendaWeek - see example (available since version 1.4)
-agendaDay - see example (available since version 1.4)
-You can define header buttons to allow the user to switch between them. You can set the initial view of the calendar with the defaultView option.
-*/
 $view_array = array('month', 'agendaWeek', 'agendaDay');
 
+//Time Slot Size options
+$slot_array = array(5, 10, 15, 30);
+
 $common_css = "
-<link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
-<link rel='stylesheet' type='text/css' href='css/bootstrap-1.4.0.min.css'>
+<link rel='stylesheet' type='text/css' href='".$site_root."css/jquery-ui-1.7.2.custom.css' />
+<link rel='stylesheet' type='text/css' href='".$site_root."extermal_libs/bootstrap/css/bootstrap.min.css'>
+<link rel='stylesheet' type='text/css' href='".$site_root."extermal_libs/bootstrap/css/bootstrap-responsive.min.css'>
 <link rel='stylesheet' type='text/css' href='".$site_root."main.css' />
+";
+
+$common_jquery = "
+$('.dropdown-toggle').dropdown();
 ";
 ?>
