@@ -120,11 +120,21 @@ firstHour: <?echo $start_hour;?>,
   events: [
 <?
 
+$show_calendars = array();
+$store_show_val = array();
+
 $events_string = "";
 $appointments = getRangeOfAppointments($id, $start_day, $end_day);
 if($appointments){
   foreach($appointments as $item){
     $events_string .= drawBlockByBid($item['bid'], "block.php?bid=".$item['bid'], $id);
+    if(!in_array($item['ou_code']."/".$item['role'], $store_show_val)){
+      $store_show_val[] = $item['ou_code']."/".$item['role'];
+      $show_calendars[] = array(
+        'name'=>$item['ou_code']."/".$item['role'],
+        'class'=>$item['ou_code']."-".$item['role']
+      );
+    }
   }
 }
 //Trim last comma
@@ -138,6 +148,57 @@ echo "\n\r";
 );
 $('#calendar').fullCalendar('gotoDate', <?echo $date['year'];?>, <?echo $date['month'];?>, <?echo $date['day'];?>);
 
+
+<?
+/*
+Schedule sample
+*/
+if( ($id == 'demo0004') or ($id == 'demo0005') ){
+$schedule_array = array(
+  array(
+    'Title'=>'Math100',
+    'start_time'=>strtotime('2012-05-21 09:30')."000",
+    'end_time'=>strtotime('2012-05-21 10:25')."000",
+  ),
+  array(
+    'Title'=>'Math100',
+    'start_time'=>strtotime('2012-05-23 09:30')."000",
+    'end_time'=>strtotime('2012-05-23 10:25')."000",
+  ),
+  array(
+    'Title'=>'Hist120',
+    'start_time'=>strtotime('2012-05-21 13:00')."000",
+    'end_time'=>strtotime('2012-05-21 14:25')."000",
+  ),
+  array(
+    'Title'=>'Hist120',
+    'start_time'=>strtotime('2012-05-23 13:00')."000",
+    'end_time'=>strtotime('2012-05-23 14:25')."000",
+  ),
+  array(
+    'Title'=>'Hist120',
+    'start_time'=>strtotime('2012-04-20 13:00')."000",
+    'end_time'=>strtotime('2012-04-20 14:25')."000",
+  ),
+);
+$schedule_array = json_encode($schedule_array);
+//echo $schedule_array;
+?>
+
+var schedule_json = <?echo $schedule_array;?>;
+ /*
+$.each(schedule_json, function(key, value){
+
+  $("#calendar").fullCalendar('renderEvent', {
+    title: value.Title,
+    start: new Date(parseInt(value.start_time)),
+    end: new Date(parseInt(value.end_time)),
+    allDay: false,
+    color: '#6868D4',
+   })
+});
+*/
+<?}?>
 		
 	});
 
@@ -166,7 +227,6 @@ font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
 <body>
 <div class="container-fluid">
 <?
-
 drawHeader($id);
 drawCalControld($selected_date, $view);
 ?>
@@ -176,11 +236,24 @@ drawCalControld($selected_date, $view);
 <div class="row">
 <hr />
   <div class="sidebar span2">
-    <!--TODO remove demo-->
-    <div class="alert alert-message">
-      <a href="place.php?sid=00776162&sou=bookit&srole=student&ou=bookit&role=charter">Jason McPheron</a> is looking for an appointment<br />
-    </div>
-  <h2>Departments</h2>
+  <h2>Calendars</h2>
+<?
+  foreach($show_calendars as $item){
+    $this_cal_list_color = getUserSettingValue($id, 'calendar_color', $item['name']);
+    if(!$this_cal_list_color){
+      $this_cal_list_color = "333399";
+    }
+    echo "<div class=\"cal-list ".$item['class']."\" id=\"cal-".$item['class']."\" style=\"background-color: #$this_cal_list_color; color:white; padding:5px; \">\n";
+    echo $item['name'];
+    echo "</div>\n";
+    echo "<br />";
+  }
+
+  if($schedule_array){
+    echo "<div class=\"cal-list ".$item['class']."\" id=\"cal-".$item['class']."\" style=\"background-color: #6868D4; color:white; padding:5px; \">\n";
+    echo "Class Schedule</div><br />";
+  }
+?>
   <br /><br /><br />
   </div>
   

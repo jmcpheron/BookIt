@@ -138,7 +138,7 @@ b.title,
 b.start_time, 
 TO_CHAR(b.start_time,'YYYY, (MM - 1), DD, HH24, MI') AS start_time,
 TO_CHAR(b.end_time,'YYYY, (MM - 1), DD, HH24, MI') AS end_time,
-case when u.sub_value is null then '#333399' else u.sub_value end as color
+case when u.sub_value is null then '333399' else u.sub_value end as color
 FROM participants p 
 left join blocks b on (p.bid = b.bid)
 left join user_settings u on (

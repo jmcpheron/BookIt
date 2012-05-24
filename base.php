@@ -7,9 +7,11 @@ include_once("session.php");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
+<?echo $common_js;?>
 <script type='text/javascript'>
 $(document).ready(function() {
+<?echo $common_jquery;?>
+
 });
 </script>
 <?

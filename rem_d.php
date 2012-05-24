@@ -1,5 +1,6 @@
 <?
 include("config.php");
+include("functions.php");
 
 $query = $_GET['q'];
 
@@ -26,6 +27,31 @@ $ds=ldap_connect($ldap_server);
   @$sr = ldap_search($ds, $search, $filter, array('sn', 'givenname', 'uid', 'displayname'), array(), 15, 10);
   @$info = ldap_get_entries($ds, $sr);
 
+//TODO Security
+//$info = array();
+$sql = "
+select id, firstname, lastname 
+from person
+where id not like '0%'
+and lower(firstname) || ' ' || lower(lastname) like '%".strtolower($query)."%'
+";
+$results = db_query($sql);
+if($results){
+  foreach($results as $item){
+    $info[] = array(
+    0=>'sn',
+    'sn'=>array('count'=>1,0=>$item['lastname']),
+    1=>'givenname',
+    'givenname'=>array('count'=>1,0=>$item['firstname']),
+    2=>'uid',
+    'uid'=>array('count'=>1,0=>$item['id']),
+    3=>'displayname',
+    'displayname'=>array('count'=>1,0=>$item['firstname'].' '.$item['lastname'])
+    );
+    $info['count'] = $info['count'] + 1;
+  
+  }
+}
 
 //print_r($info);
 $json = json_encode($info);

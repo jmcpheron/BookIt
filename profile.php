@@ -25,6 +25,7 @@ if($_POST){
 <script type="text/javascript" src="<?echo $jquery_color_picker_path;?>"></script> 
 
 <link rel='stylesheet' type='text/css' href='<?echo $jquery_color_picker_css;?>' />
+<script type='text/javascript' src='<?echo $bootstrap_tabs_path;?>'></script>
 <script type='text/javascript'>
 
 $(document).ready(function() {
@@ -144,7 +145,7 @@ echo "\n";
 echo "<div class=\"blah span14\">\n";
 
 ?>
-<ul class="tabs">
+<ul class="tabs nav nav-tabs">
   <li id="settings-tab"><a href="#settings">Settings</a></li>
   <li id="roles-tab"><a href="#roles">Roles</a><li>
   <li id="admin-tab"><a href="#admin">Admin</a><li>
@@ -226,7 +227,7 @@ $current_default_view = getUserSettingValue($id, 'start_hour');
 
   <div class="span8 tab_content" id="roles">
 <?
-echo "<form class=\"form-stacked\" id=\"roles\">\n";
+echo "<form class=\"form-stacked\" id=\"froles\">\n";
 echo "<h2>Default Role</h2>\n";
 $current_default_role = getUserSettingValue($id, 'default_role');
 

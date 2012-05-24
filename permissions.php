@@ -11,10 +11,14 @@ $role = fixString($_GET['role']);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><?echo $site_title;?> </title>
-<script type='text/javascript' src='<?echo $jquery_path;?>'></script>
+<?echo $common_js;?>
 <script type='text/javascript' src='<?echo $bootstrap_modal_path;?>'></script>
+<script type='text/javascript' src='<?echo $bootstrap_tabs_path;?>'></script>
 <script type='text/javascript'>
 $(document).ready(function() {
+<?echo $common_jquery;?>
+
+
   $("select").change( function(){
     var this_id = $(this).prop('id');
     var this_value = $(this).val();
@@ -32,7 +36,7 @@ $(document).ready(function() {
       if(data.status == 'success'){
         var remove_link = "remove_role_permission.php?ou=<?echo $ou;?>&role=<?echo $role;?>&p=" + this_id + "&v=" + this_value;
         $("#modal-from-dom").modal('hide');
-        $("#permissions-table tbody").append("<tr><td>" + this_id + "</td><td>" + this_value + "</td><td><a href='" + remove_link + "' class='btn danger'>x</a></td></tr>");
+        $("#permissions-table tbody").append("<tr><td>" + this_id + "</td><td>" + this_value + "</td><td><a href='" + remove_link + "' class='btn btn-danger'>x</a></td></tr>");
     
         //Reset form
         $("select").val($("option:first").val());
@@ -105,7 +109,7 @@ drawHeader($id);
 $roles = listRolesInOu($ou);
 function drawSelection($id, $roles){
 $selection = "
-<select class=\"span6\" class=\"pick-affected\" id=\"$id\">
+<select class=\"span4\" class=\"pick-affected\" id=\"$id\">
 <option >Choose affected role(s)</option>
 <option value=\"all\">All</option>
 ";
@@ -137,24 +141,21 @@ echo "</table>";
 ?>
             </div>
             <div class="modal-footer">
-              <a href="#" class="btn primary">Primary</a>
-              <a href="#" class="btn secondary close">Close</a>
+              <a href="#" class="btn btn-primary close">Close</a>
             </div>
           </div>
 <h2>Administration for <?echo "$ou / $role";?></h2>
 
-<ul class="tabs">
-  <li id="users-tab"><a href="#users">Users</a></li>
-  <li id="permissions-tab"><a href="#permissions">Permissions</a><li>
+<ul class="nav nav-tabs tabs">
+  <li id="permissions-tab" data-toggle="tab"><a href="#permissions">Permissions</a><li>
+  <li id="users-tab" data-toggle="tab"><a href="#users">Users</a></li>
 </ul>
-          <div class="span8 tab_content" id="users">
-
-          </div>
 
           <div class="span8 tab_content" id="permissions">
 <?
-echo "<button data-controls-modal=\"modal-from-dom\" data-backdrop=\"true\" data-keyboard=\"true\" class=\"btn success\">+ Add Permission</button>";
-echo "<table class=\"span6\" id=\"permissions-table\">\n";
+echo "<button data-controls-modal=\"modal-from-dom\" data-backdrop=\"true\" data-keyboard=\"true\" class=\"btn btn-success\">+ Add Permission</button>";
+echo "<br /><br />";
+echo "<table class=\"table table-bordered span6\" id=\"permissions-table\">\n";
 echo "<thead>\n";
 echo "<tr><th>Permission</th><th>Value</th><th>Delete</th></tr>\n";
 echo "</thead>";
@@ -165,12 +166,15 @@ foreach($permissions as $p){
   echo "<tr>";
   echo "<td>".$p['permissions']."</td>";
   echo "<td>".$p['affected']."</td>";
-  echo "<td><a href=\"remove_role_permission.php?ou=$ou&role=$role&p=".$p['permissions']."&v=".$p['affected']."\" class=\"btn danger\">X</a></td>";
+  echo "<td><a href=\"remove_role_permission.php?ou=$ou&role=$role&p=".$p['permissions']."&v=".$p['affected']."\" class=\"btn btn-danger\"><i class=\"icon-trash icon-white\"></i> Delete</a></td>";
   echo "</tr>\n";
 }
 echo "</tbody>\n";
 echo "</table>\n";
 ?>
+          </div>
+          <div class="span8 tab_content" id="users">
+
           </div>
 </div>
 </div>

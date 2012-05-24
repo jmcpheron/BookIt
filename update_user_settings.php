@@ -4,7 +4,7 @@ session_start();
 $hash = $_SESSION['hash'];
 $id = $_SESSION['id'];
 
-if($id < 1){
+if(strlen($id) < 2){
 $id = 0;
 }
 

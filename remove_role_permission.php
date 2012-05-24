@@ -9,7 +9,7 @@ if($_POST){
   $permission = fixString($_POST['p']);
   $affected = fixString($_POST['v']); 
   deleteRolePermission($ou, $role, $permission, $affected);
-  header("Location: admin.php?ou=$ou&role=$role");
+  header("Location: permissions.php?ou=$ou&role=$role");
   exit;
 }
 
@@ -52,7 +52,7 @@ drawHeader($id);
   <input type="hidden" name="role" value="<?echo $role;?>" />
   <input type="hidden" name="p" value="<?echo $permission;?>" />
   <input type="hidden" name="v" value="<?echo $affected;?>" />
-  <input type="submit" class="btn danger" value="Yes, Remove Role's Permission" /> | <a href="admin.php?ou=<?echo $ou;?>&role=<?echo $role;?>" class="btn" >Cancel</a>
+  <input type="submit" class="btn danger" value="Yes, Remove Role's Permission" /> | <a href="permissions.php?ou=<?echo $ou;?>&role=<?echo $role;?>" class="btn" >Cancel</a>
   </form>
   </div>
 </div>

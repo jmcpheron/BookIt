@@ -143,7 +143,7 @@ echo '
         </p>
 */
 echo '  <div class="btn-group pull-right">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">'.$person['firstname'].' '.$person['lastname'].'<span class="caret"></span></button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown">'.$person['firstname'].' '.$person['lastname'].' <span class="caret"></span></button>
         <ul class="dropdown-menu">
           <li><a href="'.$site_root.'profile.php"><i class="icon-user"></i> Profile</a></li> 
           <li><a href="'.$site_root.'profile.php"><i class="icon-cog"></i> Settings</a></li> 
