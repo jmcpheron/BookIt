@@ -52,6 +52,7 @@ function drawRolesSelection($id, $ou, $role = null){
 }
 
 function drawCalControld($date, $current_view, $extra_array = null){
+  $query_string = "";
   if($extra_array){
     $query_string = http_build_query($extra_array);
   }
