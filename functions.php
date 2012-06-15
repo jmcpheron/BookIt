@@ -296,7 +296,7 @@ $return = "
 <html xmlns=\"http://www.w3.org/1999/xhtml\">
 <head>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />
-<title>$site_title</title>
+<title>I".strip_tags($site_title)."</title>
 <link rel='stylesheet' type='text/css' href='fullcalendar-1.4.8/fullcalendar/fullcalendar.css' />
 <link rel='stylesheet' type='text/css' href='css/jquery-ui-1.7.2.custom.css' />
 <script type='text/javascript' src='fullcalendar-1.4.8/jquery/jquery-1.4.3.min.js'></script>

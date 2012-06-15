@@ -19,7 +19,7 @@ $ds=ldap_connect($ldap_server);
   $search="ou=People,o=nocccd.edu,o=cp";
   $filter="(&(objectClass=*)(sn=McPhero*))";
   $filter="(&(objectClass=*)(displayname=*McPheron*))";
-  $filter="(&(objectClass=*)(displayname=*$query*) )";
+  $filter="(&(objectClass=*)(displayname=$query) )";
   //$filter="(&(objectClass=*)(givenname=".$array_name[0].")(sn=Ho))";
   //$filter="(&(objectClass=*)(displayname=".$search."))";
  
