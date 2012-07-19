@@ -56,7 +56,7 @@ if($view == 'agendaDay'){
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?echo $site_title;?> </title>
+<title><?echo strip_tags($site_title);?> </title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?
 echo $common_js;
@@ -236,6 +236,9 @@ drawCalControld($selected_date, $view);
 <div class="row">
 <hr />
   <div class="sidebar span2">
+    <div class="alert">
+    <a href="generate_slots.php">Sample Schedule Setup</a>
+    </div>
   <h2>Calendars</h2>
 <?
   foreach($show_calendars as $item){
