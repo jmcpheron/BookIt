@@ -17,14 +17,13 @@ $ds=ldap_connect($ldap_server);
   //TODO make this generic and store it in the database or a config file
   //The filter may need to be a function or something
   $search="ou=People,o=nocccd.edu,o=cp";
-  $filter="(&(objectClass=*)(uid=$id))";
   $filter="(&(objectClass=*)(sn=McPhero*))";
   $filter="(&(objectClass=*)(displayname=*McPheron*))";
   $filter="(&(objectClass=*)(displayname=*$query*) )";
   //$filter="(&(objectClass=*)(givenname=".$array_name[0].")(sn=Ho))";
   //$filter="(&(objectClass=*)(displayname=".$search."))";
  
-  @$sr = ldap_search($ds, $search, $filter, array('sn', 'givenname', 'uid', 'displayname'), array(), 15, 10);
+  @$sr = ldap_search($ds, $search, $filter, array('sn', 'givenname', 'uid', 'displayname'), 0, 11, 10 );
   @$info = ldap_get_entries($ds, $sr);
 
 //TODO Security

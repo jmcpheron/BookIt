@@ -52,6 +52,7 @@ function drawRolesSelection($id, $ou, $role = null){
 }
 
 function drawCalControld($date, $current_view, $extra_array = null){
+  $query_string = "";
   if($extra_array){
     $query_string = http_build_query($extra_array);
   }
@@ -324,6 +325,8 @@ include("config.php");
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+
 
   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
   $output = curl_exec($ch);
