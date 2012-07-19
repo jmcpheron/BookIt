@@ -66,6 +66,16 @@ echo $full_calendar_links;
 ?>
 <!--<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.js'></script>-->
 <script type='text/javascript'>
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+};
+
+
 $(document).ready(function() {
 <?echo $common_jquery;?>
 
@@ -199,6 +209,33 @@ $.each(schedule_json, function(key, value){
 });
 */
 <?}?>
+
+var show_days = 10;
+var show_hours = 4;
+var c_show_days = 0;
+var c_show_hours = 0;
+
+$(".cal-list").click( function(){
+  while(c_show_days < 2){
+    while(c_show_hours < 2){
+      $("#calendar").fullCalendar('renderEvent', {
+        title: 'Test',
+        start: new Date('2012-07-05 ' + show_hours + ':00.000'),
+        end: new Date('2012-07-05 ' + (show_hours + 1) + ':00.000'),
+        allDay: false,
+        color: '#6868D4',
+       })
+      show_hours = show_hours + 1;
+      c_show_hours = c_show_hours + 1;
+    }
+    show_days = show_days + 1;
+    c_show_days = c_show_days + 1;
+    c_show_hours = 0; 
+    show_hours = 4; 
+  }
+  
+
+});
 		
 	});
 
