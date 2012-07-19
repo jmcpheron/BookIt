@@ -273,6 +273,9 @@ drawCalControld($selected_date, $view);
 <div class="row">
 <hr />
   <div class="sidebar span2">
+    <div class="alert">
+    <a href="generate_slots.php">Sample Schedule Setup</a>
+    </div>
   <h2>Calendars</h2>
 <?
   foreach($show_calendars as $item){
