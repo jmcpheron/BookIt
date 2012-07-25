@@ -10,15 +10,40 @@ $ou = explode("/", $ou);
 $role = $ou[1];
 $ou = $ou[0];
 }
+  $dows = array('U', 'M', 'T', 'W', 'R', 'F', 'S');
 
 if($_POST){
-  print_r($_POST);
+  $interval = fixString($_POST['interval']);
+  $appt_title = fixString($_POST['title']);
+
+  $dow_to_use = array();
+
+  foreach($_POST['dow'] as $p_dow){
+    $dow_to_use[] = array_search($p_dow, $dows);
+      
+    }
+
   $l_date = $_POST['start_date'];
   while($l_date <= $_POST['end_date']){
-    echo $l_date;
-    echo "<br />";
+    //Is it the right dow of the week?
+    if(in_array( date('w', strtotime($l_date)), $dow_to_use) ){
+      $each_slot =  strtotime($l_date." ".$_POST['start_time']);
+      while($each_slot < strtotime($l_date." ".$_POST['end_time'])){
+        $each_slot = $each_slot + ($interval * 60 );
+
+        $start_appt = date('Y-m-d H:i:00', $each_slot);
+        $end_appt = date('Y-m-d H:i:00', strtotime($start_appt) + ($_POST['interval'] * 60));
+        $this_bid = newBlock($start_appt, $end_appt, $appt_title, $id);
+        //Add myself to these blocks
+        addParticipant($this_bid, $id, $ou, $role, $id, '1');
+ 
+        //Make it an open appt
+        addProperty($this_bid, $id, $ou, 'student', 'max', '1', $id);
+      }
+    }
     $l_date = date('Y-m-d', strtotime(date("Y-m-d", strtotime($l_date)) . " +1 day") );
   }
+  header("Location: index.php");
   exit;
 }
 ?>
@@ -100,19 +125,24 @@ drawHeader($id);
 $long_name = getOuLongName($ou);
 echo "<h3>$long_name [$ou]</h3>";
 echo "<h4>$role</h4>";
+
 ?>
 
 
 <br />
 <br />
-<form method="post" action="" name="slots">
-<input type="checkbox" name="dow[]" value="U"> U |
-<input type="checkbox" name="dow[]" value="M"> M |
-<input type="checkbox" name="dow[]" value="T"> T |
-<input type="checkbox" name="dow[]" value="W"> W |
-<input type="checkbox" name="dow[]" value="R"> R |
-<input type="checkbox" name="dow[]" value="F"> F |
-<input type="checkbox" name="dow[]" value="S"> S |
+<form method="post" action="" name="slots" class="form form-inline">
+Title: <input type="text" name="title" class="span4" /> 
+<br />
+<br />
+Days of the week:<br />
+<?
+foreach($dows as $dow){
+  echo "<input type=\"checkbox\" name=\"dow[]\" value=\"$dow\" id=\"dow-$dow\"> <label for=\"dow-$dow\">$dow</label> | \n";
+}
+$start_time = "9:00 AM";
+$end_time = "3:00 PM";
+?>
 <br />
 <br />
 <div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" class="span2" /> 
@@ -120,7 +150,7 @@ echo "<h4>$role</h4>";
 <br /><br />
 End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" class="span2" /></div>
 <br /><br />
-Interval in minutes: <input type="text" name="interval" class="span1">
+Interval in minutes: <input type="text" name="interval" class="span1" value="30">
 <br /><br />
 Start date: <input type="text" name="start_date" class="span2" value="<?echo date('Y-m-d');?>">
 <br /><br />
