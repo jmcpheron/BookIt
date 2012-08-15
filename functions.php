@@ -234,7 +234,7 @@ function getOpenAppointments($ou_code = null, $role = null, $start_day, $end_day
   return $appointments;
 }
 
-function drawBlockByBid($bid, $page = null, $id = null, $color_override = null){
+function drawBlockByBid($bid, $page = null, $id = null, $color_override = null, $append_title = null){
 
   $appointments = dbo_getBid($bid,  $id);
   if($appointments){
@@ -250,11 +250,11 @@ function drawBlockByBid($bid, $page = null, $id = null, $color_override = null){
       }
       
       if($color_override){
-        $color = "green";
+        $color = "#".$color_override;
       }
 
       $return.= "{";
-      $return.= "title: '".$appt['title']."',\n";
+      $return.= "title: '".$appt['title']."$append_title',\n";
       $return.= "start: new Date(".$appt['start_time']."),\n";
       $return.= "end: new Date(".$appt['end_time']."),\n";
       if($page){

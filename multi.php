@@ -133,11 +133,62 @@ firstHour: <?echo $start_hour;?>,
 $show_calendars = array();
 $store_show_val = array();
 
+$sql = "
+select n.firstname || ' ' || n.lastname as name, r.id
+from ou_roles r
+left join person n on (r.id = n.id)
+left join participants p on (r.id = p.id 
+  and r.ou_code= p.ou_code 
+  and r.role = p.role)
+left join blocks b on (p.bid = b.bid)
+where r.ou_code = 'bookit'
+and r.role = 'charter'
+and b.start_time >= '$start_day'
+and b.start_time <= '$end_day'
+group by n.firstname, n.lastname, r.id
+";
+$people = db_query($sql);
+
+$p_colors = array(
+'3366FF',
+'6633FF',
+'CC33FF',
+'FF33CC',
+'FF6633',
+'B88A00',
+'CCFF33',
+'FFCC33'
+);
+$p = 0;
+foreach($people as $item){
+  $this_color[$item['id']] = $p_colors[$p]; 
+  $p++;
+}
+
 $events_string = "";
-$appointments = getRangeOfAppointments($id, $start_day, $end_day);
+//$appointments = getRangeOfAppointments($id, $start_day, $end_day);
+$sql = "
+select b.bid, p.ou_code, p.role,
+b.title || ' ' || p.id as title, 
+TO_CHAR(b.start_time,'YYYY, (MM - 1), DD, HH24, MI') AS start_time,
+TO_CHAR(b.end_time,'YYYY, (MM - 1), DD, HH24, MI') AS end_time,
+--b.start_time, b.end_time, 
+p.id
+from ou_roles r
+left join participants p on (r.id = p.id 
+  and r.ou_code= p.ou_code 
+  and r.role = p.role)
+left join blocks b on (p.bid = b.bid)
+where r.ou_code = 'bookit'
+and r.role = 'charter'
+and b.start_time >= '$start_day'
+and b.start_time <= '$end_day'
+";
+$appointments = db_query($sql);
 if($appointments){
   foreach($appointments as $item){
-    $events_string .= drawBlockByBid($item['bid'], "block.php?bid=".$item['bid'], $id);
+    //echo "AAA".$this_color[$item['id']];
+    $events_string .= drawBlockByBid($item['bid'], "block.php?bid=".$item['bid'], $item['id'], $this_color[$item['id']], ' ['.$item['id']."]" );
     if(!in_array($item['ou_code']."/".$item['role'], $store_show_val)){
       $store_show_val[] = $item['ou_code']."/".$item['role'];
       $show_calendars[] = array(
@@ -275,15 +326,13 @@ drawCalControld($selected_date, $view);
   <div class="sidebar span2">
     <div class="alert">
     <a href="generate_slots.php">Sample Schedule Setup</a>
-<hr />
-    <a href="multi.php">Working multi calendar</a>
     </div>
   <h2>Calendars</h2>
 <?
-  foreach($show_calendars as $item){
+  foreach($people as $item){
     $this_cal_list_color = getUserSettingValue($id, 'calendar_color', $item['name']);
     if(!$this_cal_list_color){
-      $this_cal_list_color = "333399";
+      $this_cal_list_color = $this_color[$item['id']];
     }
     echo "<div class=\"cal-list ".$item['class']."\" id=\"cal-".$item['class']."\" style=\"background-color: #$this_cal_list_color; color:white; padding:5px; \">\n";
     echo $item['name'];
