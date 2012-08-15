@@ -147,6 +147,7 @@ $end_time = "3:00 PM";
 <br />
 <div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" class="span2" /> 
 
+
 <br /><br />
 End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" class="span2" /></div>
 <br /><br />
