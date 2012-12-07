@@ -2,6 +2,7 @@
 
 function fixString($str){
   $return = $str;
+  $return = trim($return);
   $return = strip_tags($return);
   $return = addslashes($return);
 

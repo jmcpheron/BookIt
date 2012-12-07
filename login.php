@@ -32,7 +32,7 @@ echo '
     <div class="navbar navbar-fixed-top" >
       <div class="navbar-inner">
         <div class="container">
-          <h3><a href="'.$site_root.'" class="brand" >'.$site_title.'</a></h3>
+          <h3><a href="'.$site_root.'" class="brand" ></a></h3>
         </p>
       </div><!-- container?-->
       </div><!-- /navbar-inner -->
