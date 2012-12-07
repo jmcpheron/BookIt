@@ -2,6 +2,7 @@
 
 function fixString($str){
   $return = $str;
+  $return = trim($return);
   $return = strip_tags($return);
   $return = addslashes($return);
 
@@ -117,34 +118,37 @@ function getName($id){
   return $return;
 }
 
-function drawHeader($id){
+function drawHeader($id, $specific_url = null){
   $page = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   include("common.php");
   include("session.php");
   $person = dbo_person($id);
-
-  $request_uri = $_SERVER['REQUEST_URI'];
-  $path = explode("/", $request_uri);
-  $p = 2;
 echo '
     <div class="navbar navbar-fixed-top" >
       <div class="navbar-inner">
         <div class="container">
-          <h3><a href="'.$site_root.'" class="brand" >'.$site_title.'</a></h3>
 ';
+   if($specific_url){
+
+echo '<h3><a href="'.$specific_url['url'].'" class="brand" >'.$specific_url['text'].'</a></h3>';
+   }else
+echo '<h3><a href="'.$site_root.'" class="brand" >'.$site_title.'</a></h3>';
 /*
-          <p class="pull-left">
 ';
+          <p class="pull-left">';
+  $request_uri = $_SERVER['REQUEST_URI'];
+  $path = explode("/", $request_uri);
+  $p = 0;
   while($p < count($path) - 1){
     echo " > <a href=\"".$site_root.$build_path.$path[$p]."\">".ucfirst($path[$p])."</a> ";
     $build_path.=$path[$p]."/";
     $p++;
   }
 echo '
-        </p>
+        </p>';
 */
 echo '  <div class="btn-group pull-right">
-        <button class="btn dropdown-toggle" data-toggle="dropdown">'.$person['firstname'].' '.$person['lastname'].' <span class="caret"></span></button>
+        <button class="btn dropdown-toggle" data-toggle="dropdown"><img src='.getAvatar($id, 15).' /> '.$person['firstname'].' '.$person['lastname'].' <span class="caret"></span></button>
         <ul class="dropdown-menu">
           <li><a href="'.$site_root.'profile.php"><i class="icon-user"></i> Profile</a></li> 
           <li><a href="'.$site_root.'profile.php"><i class="icon-cog"></i> Settings</a></li> 
@@ -360,9 +364,10 @@ include("config.php");
   //TODO Move to databse?
   $lastname =  $info[0]['sn'][0];
   $firstname = $info[0]['givenname'][0];
+  $email = $info[0]['mail'][0];
 
   $return = array('lastname'=>$lastname, 'firstname'=>$firstname);
-  dbo_insertOrUpdateLocalPerson($id, $firstname, null, $lastname, null);
+  dbo_insertOrUpdateLocalPerson($id, $firstname, null, $lastname, null, $email);
   return $return;
 }
 
@@ -442,5 +447,27 @@ function userCurrentRoleInBlock($bid, $id){
   //Returns the user's id, ou and role in specified block
   $result = dbo_getUserRole($bid, $id);
   return $result;
+}
+
+function getPersonArray($id){
+  //Returns the user's id, ou and role in specified block
+  $result = dbo_person($id);
+  return $result;
+}
+
+function getAvatar($id, $size, $default = null){
+      $person = dbo_person($id);
+      $email = $person['email'];
+      if(strlen($email) < 3){
+        //This will give us something consistant to pass to gravatar
+        $email = $id;
+      }
+
+      if($default){
+        $return = 'https://www.gravatar.com/avatar/'.md5($email).'?s='.$size.'&d='.$default;
+      }else{
+        $return = 'https://www.gravatar.com/avatar/'.md5($email).'?s='.$size.'&d=wavatar';
+      }
+      return $return;
 }
 ?>

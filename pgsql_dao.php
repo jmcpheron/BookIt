@@ -207,7 +207,7 @@ return $results;
 function dbo_person($id){
 
 $sql = "
-SELECT firstname, middlename, lastname 
+SELECT firstname, middlename, lastname, email
 FROM person 
 WHERE id = '$id'
 ";
@@ -301,7 +301,7 @@ return $results;
 
 }
 
-function dbo_insertOrUpdateLocalPerson($id, $firstname = null, $middlename = null, $lastname = null, $dob = null){ 
+function dbo_insertOrUpdateLocalPerson($id, $firstname = null, $middlename = null, $lastname = null, $dob = null, $email = null){ 
   if(strlen($dob) < 10){
     $dob = 'null';
   }
@@ -318,6 +318,7 @@ function dbo_insertOrUpdateLocalPerson($id, $firstname = null, $middlename = nul
     SET firstname = '$firstname',
     middlename = '$middlename',
     lastname = '$lastname',
+    email = '$email',
     dob = $dob
     WHERE id = '$id'
     ";
@@ -325,9 +326,9 @@ function dbo_insertOrUpdateLocalPerson($id, $firstname = null, $middlename = nul
     //Insert
     $sql = "
     INSERT INTO person
-    (id, firstname, middlename, lastname, dob)
+    (id, firstname, middlename, lastname, dob, email)
     VALUES
-    ('$id', '$firstname', '$middlename', '$lastname', $dob)
+    ('$id', '$firstname', '$middlename', '$lastname', $dob, '$email')
     ";
   }
   $results = db_query($sql);
