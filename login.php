@@ -134,9 +134,16 @@ if(tryLdapAuth($username, $password) == true){
   //END remove
   
   getLdapPersonInfo($username);
+  /*
   session_start();
   $_SESSION['id'] = $username;
   $_SESSION['hash'] = md5($username.$salt);
+  */
+  
+  $c_hash = md5($username.$salt);
+  setcookie('id', $username, $cookie_time);
+  setcookie('hash', $c_hash, $cookie_time);
+  
   
   $success = true;
 
@@ -147,10 +154,15 @@ if(tryLdapAuth($username, $password) == true){
 }
 //Try local password
 if(checkLogin($username, $password) == true){
+  /*
   session_start();
   $_SESSION['id'] = $username;
   $_SESSION['hash'] = md5($username.$salt);
+  */
   
+  $c_hash = md5($username.$salt);
+  setcookie('id', $username, $cookie_time);
+  setcookie('hash', $c_hash, $cookie_time);
   $success = true;
 
   //TODO Remove for production
