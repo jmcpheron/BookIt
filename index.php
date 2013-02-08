@@ -276,7 +276,7 @@ drawCalControld($selected_date, $view);
     <div class="alert">
     <a href="generate_slots.php">Sample Schedule Setup</a>
 <hr />
-    <a href="multi.php">Working multi calendar</a>
+    <a href="multi.php" class="hint hint--top" data-hint="Test tooltip hint">Working multi calendar</a>
     </div>
   <h2>Calendars</h2>
 <?
