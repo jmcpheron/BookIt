@@ -39,13 +39,6 @@ echo '
     </div><!-- /navbar -->
 ';
 
-//TODO
-//Remove these demo accounts eventually
-$demo_account_logins = array();
-$demo_account_logins[] = array('name'=>'counselor', 'id'=>'demo0002','pass'=>'demo02');
-$demo_account_logins[] = array('name'=>'Manager', 'id'=>'demo0003','pass'=>'passwd');
-$demo_account_logins[] = array('name'=>'General Student', 'id'=>'demo0004','pass'=>'passwd');
-//$demo_account_logins[] = array('name'=>'Student Athlete', 'id'=>'demo0005','pass'=>'passwd');
 
 //TODO Change login instructions to a message an administrator can edit
 
@@ -77,20 +70,6 @@ echo "
   </form>
   </div>
 
-  <div class=\"span4 well offset1\">
-    <h2>Demo Accounts</h2>
-";
-foreach($demo_account_logins as $d_login){
-    echo "<form action=\"".$site_root."login.php\" method=post class=\"form-vertical\">";
-    echo "<input type=\"hidden\" name=\"p\" value=\"$page\"/>
-          <input type=\"hidden\" name=\"username\" value=\"".$d_login['id']."\"/>
-          <input type=\"hidden\" name=\"password\" value=\"".$d_login['pass']."\" />";
-    echo "<button class=\"btn btn-info span2\">".ucfirst($d_login['name'])."</button><br />";
-    echo "</form>";
-}
-
-echo "
-  </div>
 
 </div>
 </div>
