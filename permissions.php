@@ -10,7 +10,7 @@ $role = fixString($_GET['role']);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?echo $site_title;?> </title>
+<title><?echo strip_tags($site_title);?> </title>
 <?echo $common_js;?>
 <script type='text/javascript' src='<?echo $bootstrap_modal_path;?>'></script>
 <script type='text/javascript' src='<?echo $bootstrap_tabs_path;?>'></script>
@@ -148,7 +148,7 @@ echo "</table>";
 
 <ul class="nav nav-tabs tabs">
   <li id="permissions-tab" data-toggle="tab"><a href="#permissions">Permissions</a><li>
-  <li id="users-tab" data-toggle="tab"><a href="#users">Users</a></li>
+  <li id="users-tab" dta-toggle="tab"><a href="users.php?ou=<?echo $ou;?>&role=<?echo $role;?>">Users</a></li>
 </ul>
 
           <div class="span8 tab_content" id="permissions">

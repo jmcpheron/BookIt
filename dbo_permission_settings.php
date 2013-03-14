@@ -15,12 +15,12 @@ return $results;
 function dbo_listOusWithPermission($id, $permission){
 
   $sql = "
-  select p.ou, p.role, p.affected 
+  select p.ou--, p.role, p.affected 
   from ou_roles r
   left join role_permissions p on (r.ou_code = p.ou and r.role = p.role)
   where r.id = '$id'
-  and permissions = '$permission'
-  group by p.ou, p.role, p.affected
+  and r.role = '$permission'
+  group by p.ou--, p.role, p.affected
   ";
   $results = db_query($sql);
   return $results;
@@ -75,7 +75,7 @@ function dbo_deleteRolePermission($ou, $role, $permission, $affected){
 
 function dbo_listUsersInROle($ou, $role, $limit, $offset = 0){
   $sql = "
-  select p.id, p.firstname, p.middlename, p.lastname 
+  select r.id, p.firstname, p.middlename, p.lastname 
   from ou_roles r
   left join person p on (r.id = p.id)
   where ou_code = '$ou'

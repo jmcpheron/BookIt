@@ -1,9 +1,9 @@
 <?
 include("common.php");
-session_start();
-$hash = $_SESSION['hash'];
-$id = $_SESSION['id'];
-
+include("config.php");
+//session_start();
+$hash = $_COOKIE['hash'];
+$id = $_COOKIE['id'];
 if(strlen($id) < 2){
 $id = 0;
 }

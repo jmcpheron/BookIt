@@ -8,7 +8,7 @@ $bid = fixString($_GET['bid']);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?echo $site_title;?> </title>
+<title><?echo strip_tags($site_title);?> </title>
 <?
 echo $common_js;
 echo $common_css;
@@ -17,6 +17,26 @@ echo $common_css;
 $(document).ready(function() {
 <?echo $common_jquery;?>
 
+
+$("#search").keyup( function(){
+  var ou_role = $("input:radio[name=add_role]:checked").val();
+  var spl = ou_role.split("_");
+  
+
+  var search = $(this).val();
+  if(search.length >= 3){
+    var term = $("#term").val();
+    var url = "indexed_search.php?q=" + search;
+      $.getJSON(url, function(data){
+        $("#ajax_results").html("");
+        $.each(data, function(index, objValue) {
+          $("#ajax_results").append("<a href=\"add_participant.php?bid=<?echo $bid;?>&sou=" + spl[0] + "&srole=" + spl[1] + "&sid=" + objValue.id + "\">" + objValue.first + " " + objValue.middle + " " + objValue.last + "</a><br />");
+          });
+        
+      });
+  }
+});
+
   $("#add-btn").click( function(){
     $("#search-add").slideToggle();
     $("#search").focus();
@@ -24,37 +44,6 @@ $(document).ready(function() {
 
   $("#search").focus();
 
-  $("#form").submit(function(){
-    $("#spinner").show();
-    $("#ajax").html("");
-    $("#error").hide();
-    var q = $("input[name=search]").val();
-    var send_to_url = "add_participant.php?bid=<?echo $bid;?>&sou=bookit&srole=student&ou=bookit&role=charter&sid=";
-    $.getJSON(
-      "rem_d.php?q=" + q,
-      {},
-      function(data){
-        //debugger;
-        $("#spinner").hide();
-        for ( var i = 0; i < data.count; i++){
-          $("#ajax").append("<a href='" + send_to_url + data[i].uid[0] + "'>" + data[i].displayname[0] + ' (@' + data[i].uid[0] + ')</a><br />');
-        }
-
-       if(i >= 15){
-         $("#error").show();
-         $("#error").html('<div class="alert alert-error">There may be more matches, try refining your search.</div>');
-       }
-       if(i == 0){
-         $("#error").show();
-         $("#error").html('<div class="alert alert-message ">No matches</div>');
-
-       }
-
-      }
-    );
-
-    return false;
-  });
 });
 </script>
 </head>
@@ -68,6 +57,7 @@ echo "<h4>".$info[0]['start_time']."</h4>";
 
 //Figure out what the user's current role on the block is
 $myRole = userCurrentRoleInBlock($bid, $id);
+//print_r($myRole);
 
 //Since we'll list the participants, let's figure out the current user's abilities
 
@@ -110,15 +100,37 @@ echo "</table>";
   <div class="row" id="search-add" style="display:none">
     <div class="span5 well">
       <?
+      $sql = "
+      SELECT p.ou_code, p.role, p.value, count(a.id)
+from blocks b
+left join properties p on (b.bid = p.bid)
+left join participants a on (b.bid = a.bid and a.ou_code = p.ou_code and a.role = p.role)
+where b.bid = '$bid'
+and key = 'max'
+group by p.ou_code, p.role, p.value
+having count(a.id) < cast(p.value as int)
+      ";
+      $results = db_query($sql);
+
+
       $add_ou = $myRole['ou_code'];
       $add_role = 'student';
-      echo "Add a <span class=\"label label-info\">$add_role</span> to <span class=\"label label-info\">$add_ou</span><br /><br />";
+      $checked = " CHECKED ";
+      foreach($results as $item){
+        echo "<span class=\"label label-info\"><input type='radio' name='add_role' value='".$item['ou_code']."_".$item['role']."' $checked /> ";
+        echo $item['ou_code']." / ".$item['role']."</span> ";
+        //clear the checked variable so we just select the first item
+        $checked = "";
+      }
+
       ?>
+      <br />
+      <br />
       <form id="form">
       <input type="text" name="search" id="search" class="search-query" autocomplete="off"/>
       <br />
       <br />
-      <input type="submit" class="btn" value="Search">
+      <div id='ajax_results'></div>
       </form>
 
       <div id="error" class="span4"></div>

@@ -1,8 +1,7 @@
 <?
 include("common.php");
-session_start();
-$hash = $_SESSION['hash'];
-$id = $_SESSION['id'];
+$hash = $_COOKIE['hash'];
+$id = $_COOKIE['id'];
 
 if($id < 1){
 $id = 0;

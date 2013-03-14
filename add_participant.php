@@ -65,7 +65,7 @@ echo "
   <div class=\"alert-actions\">
   <form action=\"\" method=\"post\">
   <input type=\"hidden\" name=\"bid\" value=\"$bid\">
-  <input type=\"submit\" class=\"btn btn-primary\" value=\"Add Student\"> 
+  <input type=\"submit\" class=\"btn btn-primary\" value=\"Add $srole\"> 
   <a class=\"btn small\" href=\"$back_to_search\">Cancel</a>
   </form>
   </div>

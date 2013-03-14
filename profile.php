@@ -19,7 +19,7 @@ if($_POST){
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?echo $site_title;?> </title>
+<title><?echo strip_tags($site_title);?> </title>
 
 <?echo $common_js;?>
 <script type="text/javascript" src="<?echo $jquery_color_picker_path;?>"></script> 
@@ -92,7 +92,7 @@ $('.jquery-colour-picker-example select').colourPicker({
     $.post("update_user_settings.php", { "key": css_key, "value": full_role },
       function(data){
       if(data.status == 'error'){
-        window.location = "<?echo $site_root;?>";
+//        window.location = "<?echo $site_root;?>";
       }
       if(data.status == 'success'){
         //Reshow if previously hidden
@@ -146,15 +146,29 @@ echo "<div class=\"blah span14\">\n";
 
 ?>
 <ul class="tabs nav nav-tabs">
+  <li id="profile-tab"><a href="#profile">Profile</a></li>
   <li id="settings-tab"><a href="#settings">Settings</a></li>
   <li id="roles-tab"><a href="#roles">Roles</a><li>
   <li id="admin-tab"><a href="#admin">Admin</a><li>
 </ul>
 <?
 
-echo "  <div class=\"span5 tab_content\" id=\"settings\">\n";
+echo "  <div class=\"span5 tab_content\" id=\"profile\">\n";
 echo "<form class=\"form-stacked\">\n";
 //Default View
+$me = getPersonArray($id);
+    echo "<h2>".getName($id)."'s Profile</h2>";
+    $email = $me['email'];
+    echo "<b>Default email from Banner:</b> <i class='icon-envelope'></i> <u>$email</u>";
+    echo "<br /><br />";
+    echo "<b>Avatar</b><br />";
+    $avatar = getAvatar($id, 200);
+    echo "<img src='$avatar' />";
+    echo "<br />Change your avatar at: <a href='http://en.gravatar.com/' target='_blank'>Gravatar</a> using your <u>$email</u> email address";
+
+   echo "<hr />";
+echo "</div>";
+echo "  <div class=\"span5 tab_content\" id=\"settings\">\n";
 echo "<h2>Default View</h2>";
 $current_default_view = getUserSettingValue($id, 'default_view');
   

@@ -3,9 +3,6 @@ include("common.php");
 include_once("session.php");
 include("permission_functions.php");
 
-$ou = fixString($_GET['ou']);
-$role = fixString($_GET['role']);
-$page = fixString($_GET['p']);
 
 $offset = 0;
 if(!$page){
@@ -33,7 +30,7 @@ $("#search").keyup( function(){
       $.getJSON(url, function(data){
         $("#ajax").html("");
         $.each(data, function(index, objValue) {
-          $("#ajax").append("<a href=\"add_user.php?ou=<?echo $ou;?>&role=<?echo $role;?>&id=" + objValue.id + "\">" + objValue.first + " " + objValue.middle + " " + objValue.last + "</a><br />");
+          $("#ajax").append("<a href=\"lia_go.php?id=" + objValue.id + "\">" + objValue.first + " " + objValue.middle + " " + objValue.last + "</a><br />");
           });
         
       });

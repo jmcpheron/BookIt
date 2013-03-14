@@ -1,6 +1,7 @@
 <?
 include("common.php");
 include_once("session.php");
+include("permission_functions.php");
 $date = fixString( $_GET['date'] );
 $time = fixString( $_GET['time'] );
 $ou = fixString( $_GET['ou'] );
@@ -27,6 +28,9 @@ if($_POST){
   foreach($kkeys as $k){
     $$k = fixString($_POST[$k]);
   }
+
+
+  
   
   $start_time = $date." ".$start_time;
   $end_time = $date." ".$end_time;
@@ -34,6 +38,15 @@ if($_POST){
   $bid = newBlock($start_time, $end_time, $title, $id);
 
   addParticipant($bid, $id, $ou_code, $role, $id, '1');
+
+  $roles = listRolesInOu($ou);
+  foreach($roles as $r){
+    //print_r($r);
+    $str = 'max_participant_'.$r['role'];
+    $role = $r['role'];
+    $max = $_POST[$str];
+    addProperty($bid, $id, $ou, $role, 'max', $max, $id);
+  }
 
   header("Location: $site_root?date=$date&view=agendaDay");
   exit;
@@ -44,7 +57,7 @@ if($_POST){
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title><?echo $site_title;?> </title>
+<title><?echo strip_tags($site_title);?> </title>
 <?
 echo $common_js;
 echo $common_css;
@@ -126,7 +139,22 @@ drawRolesSelection($id, $ou, $role);
 </select>
 <br /><br />
 <div class="time">Start Time: <input type="text" name="start_time" id="time3" size="10" value="<?echo $start_time;?>" class="span2" /> 
-End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" class="span2" /></div>
+End Time: <input type="text" name="end_time" id="time4" size="10" value="<?echo $end_time;?>" class="span2" />
+
+<?
+$roles = listRolesInOu($ou);
+echo "<br />";
+foreach($roles as $r){
+  if(canIDoThisToThem(array('ou_code'=>$ou, 'role'=>$role, 'id'=>$id), $r, 'set_appointments') == true){
+ 
+    echo $r['long_name'];
+    echo "&#09;";
+    echo "<input type='text' name='max_participant_".$r['role']."' value=1 class='span1' />";
+    echo "<br />";
+  }
+}
+?>
+</div>
 <input type=hidden name="date" value="<?echo $date;?>"><br />
 <input type=hidden name="ou_code" value="<?echo $ou;?>"><br />
 <input type=submit value="Save" class="btn primary"/> &nbsp;

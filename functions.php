@@ -83,8 +83,8 @@ function drawCalControld($date, $current_view, $extra_array = null){
     $return.="</div>\n";
 
     $return.="<div class=\"btn-group span2\">\n";
-    $return.="<a title=\"Previous\" class=\"btn btn-info\" href=\"?date=$prev&view=$current_view&$query_string\"><i class=\"icon-arrow-left icon-white\"></i></a> \n";
-    $return.="<a title=\"Next\" class=\"btn btn-info\" href=\"?date=$next&view=$current_view&$query_string\"><i class=\"icon-arrow-right icon-white\"></i></a>\n";
+    $return.="<a title=\"Previous\" class=\"btn btn-info\" href=\"index.php?date=$prev&view=$current_view&$query_string\"><i class=\"icon-arrow-left icon-white\"></i></a> \n";
+    $return.="<a title=\"Next\" class=\"btn btn-info\" href=\"index.php?date=$next&view=$current_view&$query_string\"><i class=\"icon-arrow-right icon-white\"></i></a>\n";
     $return.="</div>\n";
 
 
@@ -94,7 +94,7 @@ function drawCalControld($date, $current_view, $extra_array = null){
       if($current_view == $view){
         $return.= "<a class=\"btn disabled\">$view</a> \n";
       }else{
-        $return.= "<a class=\"btn primary\" href=\"?date=$date&view=$view&$query_string\">$view</a> \n";
+        $return.= "<a class=\"btn primary\" href=\"index.php?date=$date&view=$view&$query_string\">$view</a> \n";
       }
     }
     $return.="</div>\n";
@@ -151,7 +151,7 @@ echo '  <div class="btn-group pull-right">
         <button class="btn dropdown-toggle" data-toggle="dropdown"><img src='.getAvatar($id, 15).' /> '.$person['firstname'].' '.$person['lastname'].' <span class="caret"></span></button>
         <ul class="dropdown-menu">
           <li><a href="'.$site_root.'profile.php"><i class="icon-user"></i> Profile</a></li> 
-          <li><a href="'.$site_root.'profile.php"><i class="icon-cog"></i> Settings</a></li> 
+          <li><a href="'.$site_root.'profile.php#settings"><i class="icon-cog"></i> Settings</a></li> 
           <li class="divider"></li>
           <li><a href="'.$site_root.'logout.php"><i class="icon-off"></i> Logout</a></li>
         </ul>
@@ -247,11 +247,13 @@ function drawBlockByBid($bid, $page = null, $id = null, $color_override = null, 
       //Set initial color from ou/role settings 
       $color = "#".$appt['color'];
 
+/*
       //Check if a rule overrides this color setting
       $full = dbo_isBidFull($bid);
       if($full > 0){
         $color = 'darkred';
       }
+*/
       
       if($color_override){
         $color = "#".$color_override;
@@ -469,5 +471,48 @@ function getAvatar($id, $size, $default = null){
         $return = 'https://www.gravatar.com/avatar/'.md5($email).'?s='.$size.'&d=wavatar';
       }
       return $return;
+}
+
+function drawTableArray($array, $options, $class = "table table-striped table-bordered table-hover"){
+  $return = "";
+  $return = "<table class='$class'><thead>";
+  $c = 0;
+
+  $return.= "<tr>";
+  foreach($array[0] as $k => $u){
+    $return.= "<th>$k</th>";
+  }
+  $return.= "</tr></thead><tbody>\n";
+
+  foreach($array as $k => $item){
+    $return.="<tr>";
+    foreach($item as $r => $v){
+      if($c == 0){
+      }
+      $return.= "<td>";
+
+      if(is_array($options['links'][$r])){ 
+        $return.="<a href='";
+        $return.= $options['links'][$r]['page'];
+        $return.="?";
+        foreach( $options['links'][$r]['gets'] as $get){
+          $return.=$get."=".$item[$get]."&";
+        }
+       $return.="'>";
+      }
+
+      $return.= $v;
+      if(is_array($options['links'][$r])){ 
+        $return.="</a>";
+      }
+
+      $return.= "</td>";
+    }
+    $return.= "</tr>";
+
+    $c++;
+  }
+$return.= "</tbody></table>";
+return $return;
 }
 ?>
