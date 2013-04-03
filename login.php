@@ -120,13 +120,13 @@ if(tryLdapAuth($username, $password) == true){
   */
   
   $c_hash = md5($username.$salt);
-  setcookie('id', $username, $cookie_time);
-  setcookie('hash', $c_hash, $cookie_time);
+  setcookie('id', $username, $cookie_time, '/');
+  setcookie('hash', $c_hash, $cookie_time, '/');
   
   
   $success = true;
 
-  header("Location: http://$page");
+  header("Location: https://$page");
 
 }else{
   //echo "Error. Could be a bad username or password";
@@ -150,7 +150,7 @@ if(checkLogin($username, $password) == true){
   //addSomeAppts($username);
   //END remove
 
-  header("Location: http://$page");
+  header("Location: https://$page");
 }
 
 
