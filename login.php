@@ -102,23 +102,12 @@ if(strlen($username) != 8){
 
 
 $success = false; //so far
-if(tryLdapAuth($username, $password) == true){
-  //Cache password
-  dbo_insertOrUpdateLocalPassword($username, $password);
 
-  //TODO Remove for production
-  addRole($username, 'bookit', 'charter');
-  include("demo_functions.php");
-  //addSomeAppts($username);
-  //END remove
-  
-  getLdapPersonInfo($username);
-  /*
-  session_start();
-  $_SESSION['id'] = $username;
-  $_SESSION['hash'] = md5($username.$salt);
-  */
-  
+include("check_cred.php");
+
+$tryPassword = checkPassword($username, $password);
+if($tryPassword == true){
+  dbo_insertOrUpdateLocalPassword($username, $password);
   $c_hash = md5($username.$salt);
   setcookie('id', $username, $cookie_time, '/');
   setcookie('hash', $c_hash, $cookie_time, '/');
@@ -127,30 +116,8 @@ if(tryLdapAuth($username, $password) == true){
   $success = true;
 
   header("Location: https://$page");
+  exit;
 
-}else{
-  //echo "Error. Could be a bad username or password";
-}
-//Try local password
-if(checkLogin($username, $password) == true){
-  /*
-  session_start();
-  $_SESSION['id'] = $username;
-  $_SESSION['hash'] = md5($username.$salt);
-  */
-  
-  $c_hash = md5($username.$salt);
-  setcookie('id', $username, $cookie_time);
-  setcookie('hash', $c_hash, $cookie_time);
-  $success = true;
-
-  //TODO Remove for production
-  addRole($username, 'bookit', 'charter');
-  include("demo_functions.php");
-  //addSomeAppts($username);
-  //END remove
-
-  header("Location: https://$page");
 }
 
 

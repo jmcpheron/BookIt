@@ -3,6 +3,13 @@ include("common.php");
 include_once("session.php");
 include("demo_functions.php");
 
+print_r(getPersonArray('01326136'));
+exit;
+
+$f = testLdap('00776162', '260026');
+print_r($f);
+exit;
+
 $pattern = '/\D/i';
 $pattern = '/[^a-z0-9]/i';
 $id = "@00123456";

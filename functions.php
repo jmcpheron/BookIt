@@ -312,10 +312,45 @@ $return = "
 
   echo $return;
 }
+function testLdap($username, $password){
+include("config.php");
+  $good_credentials = false;
+  echo $ldap_url;
+  //TODO move this to a settings database
+  
+  
+
+  $url = $ldap_url;
+  $data = array(
+  'userid' => $username,
+  'pin' => $password,
+  'api' => $ldap_api
+  );
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+
+
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+  $output = curl_exec($ch);
+  echo $output;
+  //$info = curl_getinfo($ch);
+  curl_close($ch);
+
+  $results = json_decode($output);
+ 
+  //if(($results->authenticated == 'true') && ($results->message == 'Successful')){
+    //$good_credentials = true;
+  //}
+  return $results;
+}
 
 function tryLdapAuth($username, $password){
 include("config.php");
-  $good_credentials = false;
+  $good_credentials = "unknown";
   //TODO move this to a settings database
   
   
@@ -343,6 +378,10 @@ include("config.php");
  
   if(($results->authenticated == 'true') && ($results->message == 'Successful')){
     $good_credentials = true;
+  }
+  if($results->authenticated == 'false'){
+    $good_credentials = false;
+ 
   }
   return $good_credentials;
 }
